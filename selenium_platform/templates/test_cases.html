@@ -1,0 +1,7 @@
+{% extends 'selenium_platform/base.html' %}
+
+{% block content %}
+  <h1>{{ test_case.name }}</h1>
+  <p>{{ test_case.description }}</p>
+  <a href="{{ test_case.file.url }}" download class="btn btn-primary">Download Test Case</a>
+{% endblock %}
