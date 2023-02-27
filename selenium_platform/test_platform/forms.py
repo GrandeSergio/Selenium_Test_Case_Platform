@@ -1,8 +1,8 @@
 from django import forms
 from .models import TestCase
 
-
-class TestCaseForm(forms.ModelForm):
+class TestUploadForm(forms.ModelForm):
     class Meta:
         model = TestCase
-        fields = ['name', 'description', 'file']
+        fields = ('name', 'file')
+

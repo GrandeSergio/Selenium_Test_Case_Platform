@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(os.path.join(BASE_DIR, 'selenium_platform/templates'))
+
 SECRET_KEY = 'your_secret_key'
 
 DEBUG = True
@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'test_platform',
     'selenium_platform',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

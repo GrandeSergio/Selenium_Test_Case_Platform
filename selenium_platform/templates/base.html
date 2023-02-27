@@ -4,29 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block styles %}{% endblock %}
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Test Platform</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-{% block content %}
-{% endblock %}
-
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'test_list' %}">Home</a></li>
+                <li><a href="{% url 'test_upload' %}">Upload</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        &copy; {{ year }} MySite
+    </footer>
+    {% block scripts %}{% endblock %}
 </body>
 </html>
+
