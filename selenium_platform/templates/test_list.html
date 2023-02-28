@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+  <table class="table">
+    <tr>
+      <th>test name</th>
+      <th>details</th>
+    </tr>
+    {% for test in tests %}
+    <tr>
+      <td>{{ test.name }}</td>
+      <td><a href="{% url 'test_details' test_id=test.id %}">Go to</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

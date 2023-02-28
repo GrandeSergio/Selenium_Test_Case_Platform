@@ -1,18 +1,29 @@
 {% extends 'base.html' %}
+
 {% block content %}
     <h2>{{ test.name }}</h2>
     <a href="{% url 'test_list' %}">Back to Test List</a>
     <br>
     <br>
-    <a href="#" id="run-test-btn">Run Test</a>
+    <button id="run-test-btn">Run Test</button>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       $(document).ready(function() {
         $('#run-test-btn').click(function() {
-          // TODO: Add code to run test
-          alert('Test has been run!');
+          $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            url: "{% url 'run_test_cases' test_id=test.id %}",
+            success: function(data) {
+              alert(data.output);
+            },
+            error: function() {
+              alert('Error running test.');
+            }
+          });
         });
       });
     </script>
 {% endblock %}
+
