@@ -6,6 +6,8 @@ import subprocess
 from django.middleware.csrf import get_token
 import logging
 from django.contrib import messages
+import os
+from django.conf import settings
 
 
 def test_list(request):
@@ -66,6 +68,14 @@ def run_test_cases(request, test_id):
         return HttpResponse("Only POST requests are allowed")
 
 def delete_test_case(request, test_id):
-    test = get_object_or_404(TestCase, pk=test_id)
-    test.delete()
-    return JsonResponse({'success': True})
+    test_case = get_object_or_404(TestCase, pk=test_id)
+    if request.method == 'POST':
+        test_case_path = os.path.join(settings.MEDIA_ROOT, str(test_case.file))
+        try:
+            os.remove(test_case_path)
+            test_case.delete()
+            return JsonResponse({'success': True})
+        except OSError:
+            return JsonResponse({'success': False, 'error_message': 'Failed to delete file'})
+
+    return render(request, 'test_delete.html', {'test': test_case})
