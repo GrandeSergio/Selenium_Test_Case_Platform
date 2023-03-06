@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
 {% block content %}
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-dark">Upload file</button>
   </form>
 
 {% endblock %}

@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:test_id>/run/', views.run_test_cases, name='run_test_cases'),
     path('upload/', views.test_upload, name='test_upload'),
     path('<int:test_id>/delete/', views.delete_test_case, name='delete_test_case'),
+    path('custom_upload/', views.custom_upload, name='custom_upload'),
 ]

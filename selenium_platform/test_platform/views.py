@@ -8,6 +8,7 @@ import logging
 from django.contrib import messages
 import os
 from django.conf import settings
+from django.urls import reverse
 
 
 def test_list(request):
@@ -79,3 +80,13 @@ def delete_test_case(request, test_id):
             return JsonResponse({'success': False, 'error_message': 'Failed to delete file'})
 
     return render(request, 'test_delete.html', {'test': test_case})
+
+def custom_upload(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        file = request.FILES.get('file')
+        if name and file:
+            test_case = TestCase.objects.create(name=name, file=file)
+            test_case_url = reverse('test_details', kwargs={'test_id': test_case.id})
+            return JsonResponse({'success': True, 'test_case_url': test_case_url})
+    return render(request, 'custom_upload.html')

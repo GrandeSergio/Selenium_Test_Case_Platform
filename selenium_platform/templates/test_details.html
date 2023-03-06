@@ -3,7 +3,7 @@
 {% csrf_token %}
 {% block content %}
     <h2>{{ test.name }}</h2>
-    <a href="{% url 'test_list' %}">Back to Test List</a>
+    <a href="{% url 'test_list' %}" class="btn btn-dark">Back to Test List</a>
     <br>
     <br>
     <table>
@@ -15,13 +15,13 @@
         </tr>
         <tr>
             <td>{{ test.name }}</td>
-            <td><a href="{{ test.file.url }}">{{ test.file }}</a></td>
+            <td><a href="{{ test.file.url }}" class="btn btn-dark">Script Code</a></td>
             <td>{{ test.last_run_status }}</td>
-            <td><button id="delete-test-btn">Delete Test</button></td>
+            <td><button id="delete-test-btn" class="btn btn-danger">Delete Test</button></td>
         </tr>
     </table>
 
     <br>
-    <button id="run-test-btn">Run script</button>
+    <button id="run-test-btn" class="btn btn-dark">Run script</button>
 
 {% endblock %}

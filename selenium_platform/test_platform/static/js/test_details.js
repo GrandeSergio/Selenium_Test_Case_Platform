@@ -70,4 +70,5 @@ $(document).ready(function() {
             });
         }, 'The test has been deleted.', '/');
     });
+
 });

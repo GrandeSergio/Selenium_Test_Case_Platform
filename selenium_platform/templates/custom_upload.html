@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <br>
+  <form method="POST" enctype="multipart/form-data" data-test-id="{{ test.id }}">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <label for="name" class="input-group-text">Name:</label>
+      <input type="text" id="name" name="name" class="form-control" required>
+    </div>
+    <div class="input-group mb-3">
+      <label for="file" class="input-group-text">File:</label>
+      <input type="file" id="file" name="file" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-dark" id="upload_button">Upload file</button>
+  </form>
+  <script>
+    // Define a global variable for the URL
+    var custom_upload_url = '{% url "custom_upload" %}';
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'js/test_upload.js' %}"></script>
+{% endblock %}
