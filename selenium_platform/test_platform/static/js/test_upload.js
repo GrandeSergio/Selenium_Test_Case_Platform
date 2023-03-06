@@ -15,9 +15,9 @@ $(document).ready(function() {
             icon: 'success',
             title: 'File uploaded successfully!',
             showConfirmButton: true, // Added option to stay on upload page or go to test details page
-            confirmButtonText: 'Go to Test Details', // Added text for confirmation button
+            confirmButtonText: 'Go To Uploaded Test Case', // Added text for confirmation button
             showCancelButton: true, // Added cancel button
-            cancelButtonText: 'Stay Here', // Added text for cancel button
+            cancelButtonText: 'Upload Next Test Case', // Added text for cancel button
           }).then(function(result) {
             if (result.isConfirmed) { // If user clicked "Go to Test Details"
               window.location.href = response.test_case_url;

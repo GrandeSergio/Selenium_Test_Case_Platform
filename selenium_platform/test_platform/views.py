@@ -9,11 +9,15 @@ from django.contrib import messages
 import os
 from django.conf import settings
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 
 def test_list(request):
     tests = TestCase.objects.all()
-    return render(request, 'test_list.html', {'tests': tests})
+    paginator = Paginator(tests, 15)  # Show 10 tests per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'test_list.html', {'page_obj': page_obj})
 
 
 def test_details(request, test_id):
