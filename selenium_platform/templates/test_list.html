@@ -3,11 +3,13 @@
   <table class="table table-sm">
     <tr>
       <th>test name</th>
+      <th>Last run status</th>
       <th>details</th>
     </tr>
     {% for test in page_obj %}
     <tr>
       <td>{{ test.name }}</td>
+      <td>{{ test.last_run_status }}</td>
       <td><a href="{% url 'test_details' test_id=test.id %}" class="btn btn-dark">Go to</a></td>
     </tr>
     {% empty %}

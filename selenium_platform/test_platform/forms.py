@@ -1,7 +1,5 @@
 from django import forms
 from .models import TestCase
-from django.forms import FileInput
-from django.utils.translation import gettext_lazy as _
 
 
 class TestUploadForm(forms.ModelForm):

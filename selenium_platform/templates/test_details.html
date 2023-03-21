@@ -10,13 +10,17 @@
         <tr data-test-id="{{ test.id }}">
             <th>Name</th>
             <th>File</th>
+            <th>Uploaded At</th>
             <th>Last Run Status</th>
-            <th></th>
+            <th>Last Run Time</th>
+            <th>Actions</th>
         </tr>
         <tr>
             <td>{{ test.name }}</td>
             <td><a href="{{ test.file.url }}" class="btn btn-dark">Script Code</a></td>
+            <td>{{ test.upload_date }}</td>
             <td>{{ test.last_run_status }}</td>
+            <td>{{ test.last_run_date }}</td>
             <td><button id="delete-test-btn" class="btn btn-danger">Delete Test</button></td>
         </tr>
     </table>
