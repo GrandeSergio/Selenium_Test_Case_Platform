@@ -21,11 +21,13 @@
             <td>{{ test.upload_date }}</td>
             <td>{{ test.last_run_status }}</td>
             <td>{{ test.last_run_date }}</td>
-            <td><button id="delete-test-btn" class="btn btn-danger">Delete Test</button></td>
+            <td>
+                <button id="delete-test-btn" class="btn btn-danger">Delete Test</button>
+                <a href="{% url 'test_history' test.id %}" class="btn btn-primary">Show History</a>
+            </td>
         </tr>
     </table>
 
     <br>
-    <button id="run-test-btn" class="btn btn-dark">Run script</button>
-
+    <button id="run-test-btn" class="btn btn-dark">Run Test</button>
 {% endblock %}

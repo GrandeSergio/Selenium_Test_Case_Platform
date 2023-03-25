@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h2>History - {{ test.name }}</h2>
+    <a href="{% url 'test_details' test.id %}" class="btn btn-dark">Back to Test Details</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Output</th>
+            <th>Created At</th>
+        </tr>
+        {% for run in runs %}
+        <tr>
+            <td>{{ run.status }}</td>
+            <td><button class="btn btn-primary output-btn" data-output="{{ run.output }}">View Output</button></td>
+            <td>{{ run.date }}</td>
+        </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No runs found.</td>
+            </tr>
+        {% endfor %}
+    </table>
+<script src="{% static 'js/test_history.js' %}"></script>
+{% endblock %}

@@ -11,3 +11,12 @@ class TestCase(models.Model):
 
     def __str__(self):
         return self.name
+
+class TestRun(models.Model):
+    test = models.ForeignKey('TestCase', on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=20)
+    output = models.TextField()
+
+    def __str__(self):
+        return f"{self.test.name} - {self.status} - {self.date}"

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
-from .models import TestCase
+from .models import TestCase, TestRun
 from .forms import TestUploadForm
 import subprocess
 from django.middleware.csrf import get_token
@@ -50,17 +50,25 @@ def run_test_cases(request, test_id):
     # Update the last_run_status and last_run_date fields of the corresponding TestCase object
     if result.returncode == 0:
         test.last_run_status = 'PASSED'
+        status = 'PASSED'
     else:
         test.last_run_status = 'FAILED'
+        status = 'FAILED'
     test.last_run_date = timezone.now()
 
-    #print(output)
     test.console_output = output
     test.save()
-    #print(result.stdout)
-    print(result.stderr)
+
+    # Create a new TestRun object and save it to the database
+    test_run = TestRun(test=test, date=timezone.now(), status=status, output=output)
+    test_run.save()
+
     return JsonResponse({'output': output})
 
+def test_history(request, test_id):
+    test = get_object_or_404(TestCase, pk=test_id)
+    runs = test.testrun_set.order_by('-date')
+    return render(request, 'test_history.html', {'test': test, 'runs': runs})
 
 '''
 def run_test_cases(request, test_id):
@@ -104,7 +112,7 @@ def delete_test_case(request, test_id):
 
     return render(request, 'test_delete.html', {'test': test_case})
 
-def custom_upload(request):
+def upload(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         file = request.FILES.get('file')
@@ -112,4 +120,4 @@ def custom_upload(request):
             test_case = TestCase.objects.create(name=name, file=file)
             test_case_url = reverse('test_details', kwargs={'test_id': test_case.id})
             return JsonResponse({'success': True, 'test_case_url': test_case_url})
-    return render(request, 'custom_upload.html')
+    return render(request, 'upload.html')

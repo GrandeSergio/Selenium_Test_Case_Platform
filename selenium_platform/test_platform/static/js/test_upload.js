@@ -5,7 +5,7 @@ $(document).ready(function() {
     var formData = new FormData(form);
     $.ajax({
       type: 'POST',
-      url: custom_upload_url,
+      url: upload_url,
       data: formData,
       processData: false,
       contentType: false,
