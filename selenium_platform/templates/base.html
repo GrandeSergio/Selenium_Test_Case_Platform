@@ -34,7 +34,22 @@
             </div>
         </nav>
     </header>
+    <div class="panel panel-default panel-horizontal">
+      <div class="panel-heading">
+        <div class="panel-title">
+          <div class="button-container">
+            <a href="javascript:history.back()" class="btn btn-default"><i class="fa fa-arrow-left"></i> Go Back</a>
+            <a href="#" class="btn btn-default" onclick="window.location.reload();"><i class="fa fa-refresh"></i> Refresh</a>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        {% block panel_content %}
+        {% endblock %}
+      </div>
+    </div>
     <main class="container">
+
         {% block content %}
         {% endblock %}
     </main>

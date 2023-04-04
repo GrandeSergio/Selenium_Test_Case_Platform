@@ -14,20 +14,30 @@ from django.utils import timezone
 
 
 def test_list(request):
-    tests = TestCase.objects.all()
-    paginator = Paginator(tests, 15)  # Show 10 tests per page.
+    sort_by = request.GET.get('sort_by', 'name')
+    sort_order = request.GET.get('sort_order', 'asc')
+    if sort_order == 'asc':
+        tests = TestCase.objects.all().order_by(sort_by)
+    else:
+        tests = TestCase.objects.all().order_by(f'-{sort_by}')
+    paginator = Paginator(tests, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'test_list.html', {'page_obj': page_obj})
+    return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by, 'sort_order': sort_order})
+
 
 
 def test_details(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
+    runs = test.testrun_set.order_by('-date')
     if request.method == 'POST':
         output = run_test_cases(test)
         return JsonResponse({'output': output})
-    return render(request, 'test_details.html', {'test': test})
+    return render(request, 'test_details.html', {'test': test, 'runs': runs})
 
+def run_output(request, run_id):
+    run = get_object_or_404(TestRun, pk=run_id)
+    return render(request, 'run_output.html', {'run': run})
 
 def test_upload(request):
     if request.method == 'POST':
@@ -57,7 +67,10 @@ def run_test_cases(request, test_id):
     test.last_run_date = timezone.now()
 
     test.console_output = output
-    test.save()
+    try:
+        test.save()
+    except Exception as e:
+        logging.error(f"Error saving test object: {e}")
 
     # Create a new TestRun object and save it to the database
     test_run = TestRun(test=test, date=timezone.now(), status=status, output=output)
@@ -69,6 +82,7 @@ def test_history(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
     runs = test.testrun_set.order_by('-date')
     return render(request, 'test_history.html', {'test': test, 'runs': runs})
+
 
 '''
 def run_test_cases(request, test_id):

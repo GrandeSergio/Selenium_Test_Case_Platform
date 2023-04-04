@@ -6,28 +6,41 @@
     <a href="{% url 'test_list' %}" class="btn btn-dark">Back to Test List</a>
     <br>
     <br>
-    <table>
-        <tr data-test-id="{{ test.id }}">
-            <th>Name</th>
-            <th>File</th>
-            <th>Uploaded At</th>
-            <th>Last Run Status</th>
-            <th>Last Run Time</th>
-            <th>Actions</th>
-        </tr>
-        <tr>
-            <td>{{ test.name }}</td>
-            <td><a href="{{ test.file.url }}" class="btn btn-dark">Script Code</a></td>
-            <td>{{ test.upload_date }}</td>
-            <td>{{ test.last_run_status }}</td>
-            <td>{{ test.last_run_date }}</td>
-            <td>
-                <button id="delete-test-btn" class="btn btn-danger">Delete Test</button>
-                <a href="{% url 'test_history' test.id %}" class="btn btn-primary">Show History</a>
-            </td>
-        </tr>
-    </table>
-
-    <br>
-    <button id="run-test-btn" class="btn btn-dark">Run Test</button>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#details" role="tab">General</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#history" role="tab">History</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="details" role="tabpanel">
+            <table>
+                <tr data-test-id="{{ test.id }}">
+                    <th>Name</th>
+                    <th>File</th>
+                    <th>Uploaded At</th>
+                    <th>Last Run Status</th>
+                    <th>Last Run Time</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <td>{{ test.name }}</td>
+                    <td><a href="{{ test.file.url }}" class="btn btn-dark">Script Code</a></td>
+                    <td>{{ test.upload_date }}</td>
+                    <td>{{ test.last_run_status }}</td>
+                    <td>{{ test.last_run_date }}</td>
+                    <td>
+                        <button id="delete-test-btn" class="btn btn-danger">Delete Test</button>
+                        <button id="run-test-btn" class="btn btn-dark">Run Test</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane" id="history" role="tabpanel">
+           {% include 'test_history.html' %}
+        </div>
+    </div>
+<script src="{% static 'js/test_history.js' %}"></script>
 {% endblock %}

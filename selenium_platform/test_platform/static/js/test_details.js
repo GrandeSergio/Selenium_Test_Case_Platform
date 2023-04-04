@@ -72,3 +72,16 @@ $(document).ready(function() {
     });
 
 });
+// Add click event listener to toggle button
+document.querySelectorAll('.output-toggle-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        // Get the output container element
+        var container = this.nextElementSibling;
+        // Toggle the display style of the output container
+        if (container.style.display === 'none') {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    });
+});

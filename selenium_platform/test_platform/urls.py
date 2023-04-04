@@ -8,5 +8,6 @@ urlpatterns = [
     #path('upload/', views.test_upload, name='test_upload'),
     path('<int:test_id>/delete/', views.delete_test_case, name='delete_test_case'),
     path('<int:test_id>/test_history/', views.test_history, name='test_history'),
+    path('runs/<int:run_id>/output/', views.run_output, name='run_output'),
     path('upload/', views.upload, name='upload'),
 ]

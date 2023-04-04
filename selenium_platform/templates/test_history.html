@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 {% load static %}
 {% block content %}
     <h2>History - {{ test.name }}</h2>
@@ -7,15 +7,19 @@
     <br>
     <table>
         <tr>
+            <th>Run At</th>
             <th>Status</th>
             <th>Output</th>
-            <th>Created At</th>
+
         </tr>
         {% for run in runs %}
         <tr>
-            <td>{{ run.status }}</td>
-            <td><button class="btn btn-primary output-btn" data-output="{{ run.output }}">View Output</button></td>
             <td>{{ run.date }}</td>
+            <td>{{ run.status }}</td>
+
+            <td><a href="{% url 'run_output' run.id %}" class="btn btn-primary">View Output</a></td>
+
+
         </tr>
         {% empty %}
             <tr>
