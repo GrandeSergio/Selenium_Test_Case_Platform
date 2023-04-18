@@ -30,10 +30,8 @@ def test_details(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
     runs = test.testrun_set.order_by('-date')
     if request.method == 'POST':
-        # Temporarily disable button to prevent double-click
-        return HttpResponse()
-        # output = run_test_cases(request, test_id)
-        # return JsonResponse({'output': output})
+        output = run_test_cases(request, test_id)
+        return JsonResponse({'output': output})
     return render(request, 'test_details.html', {'test': test, 'runs': runs})
 
 
@@ -55,7 +53,6 @@ def test_upload(request):
 
 
 def run_test_cases(request, test_id):
-    print('run_test_cases called')
     test = get_object_or_404(TestCase, pk=test_id)
     # Run the uploaded script
     result = subprocess.run(['python', '-m', 'unittest', test.file.path],

@@ -34,17 +34,17 @@ function sweetAlertConfirm(callback) {
     });
 }
 
-$(document).ready(function() {
+/*$(document).ready(function() {
     // Disable the Run Test button after it has been clicked
    $('#run-test-btn').on('click', function() {
       $(this).prop('disabled', true);
     });
-});
+});*/
 
 $(document).ready(function() {
     const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
-    const testId = $('tr[data-test-id]').data('test-id');
-    console.log(testId)
+    const testId = $('tr[data-test-id]:first').data('test-id');
+    console.log('test ', testId)
     $('#run-test-btn').click(function() {
       $.ajax({
         type: 'POST',

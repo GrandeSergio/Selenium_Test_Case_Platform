@@ -6,13 +6,6 @@ const maxRows = 10; // Maximum number of rows to show
 function get_token() {
     return $('input[name="csrfmiddlewaretoken"]').val();
 }
-/*$('.output-btn').on('click', function() {
-    var output = $(this).data('output');
-    var run_id = $(this).data('run-id');
-    var url = '/run_output/' + run_id + '/';
-    $('#test-history-container').load(url);
-});*/
-
 
 if (rows.length > maxRows) {
     // Hide rows that exceed the maximum number
@@ -37,5 +30,3 @@ if (rows.length > maxRows) {
     const container = table.parentNode;
     container.insertBefore(showMoreBtn, table.nextSibling);
 }
-
-
