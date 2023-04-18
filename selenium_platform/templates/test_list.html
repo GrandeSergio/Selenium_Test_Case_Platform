@@ -7,6 +7,7 @@
     <table class="table table-sm">
       <thead>
         <tr>
+        <th><a href="?{% if page %}page={{ page }}&{% endif %}sort_by=id{% if sort_by == 'id' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Script ID</a></th>
         <th><a href="?{% if page %}page={{ page }}&{% endif %}sort_by=name{% if sort_by == 'name' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Name</a></th>
         <th><a href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_status{% if sort_by == 'last_run_status' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Status</a></th>
         <th>Go to</th>
@@ -15,6 +16,7 @@
       <tbody>
         {% for test in page_obj %}
         <tr>
+          <td>{{ test.id }}</td>
           <td>{{ test.name }}</td>
           <td>{{ test.last_run_status }}</td>
           <td><a href="{% url 'test_details' test_id=test.id %}" class="btn btn-dark">Details</a></td>
@@ -28,33 +30,33 @@
     </table>
   </div>
 
-<div class="panel panel-pagination panel-default panel-horizontal ">
-  <nav aria-label="Test list pagination">
-    <ul class="pagination justify-content-center">
-      {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page=1{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&laquo;</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&lt;</a>
-      </li>
-      {% endif %}
+  <div class="panel panel-pagination panel-default panel-horizontal ">
+    <nav aria-label="Test list pagination">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&laquo;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&lt;</a>
+        </li>
+        {% endif %}
 
-      {% for num in page_obj.paginator.page_range %}
-      <li class="page-item{% if page_obj.number == num %} active{% endif %}">
-        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-      </li>
-      {% endfor %}
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item{% if page_obj.number == num %} active{% endif %}">
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
 
-      {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">>&gt;</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&raquo;</a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-</div>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">>&gt;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&raquo;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
 {% endblock %}

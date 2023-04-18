@@ -15,7 +15,7 @@
         </li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="details" role="tabpanel">
+        <div class="tab-pane active table-sm" id="details" role="tabpanel">
             <table>
                 <tr data-test-id="{{ test.id }}">
                     <th>Name</th>
@@ -42,5 +42,6 @@
            {% include 'test_history.html' %}
         </div>
     </div>
+<script src="{% static 'js/test_details.js' %}"></script>
 <script src="{% static 'js/test_history.js' %}"></script>
 {% endblock %}

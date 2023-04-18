@@ -1,3 +1,6 @@
+function get_token() {
+    return $('input[name="csrfmiddlewaretoken"]').val();
+}
 function sweetAlertConfirm(callback) {
     Swal.fire({
         title: 'Are you sure?',
@@ -31,7 +34,12 @@ function sweetAlertConfirm(callback) {
     });
 }
 
-
+$(document).ready(function() {
+    // Disable the Run Test button after it has been clicked
+   $('#run-test-btn').on('click', function() {
+      $(this).prop('disabled', true);
+    });
+});
 
 $(document).ready(function() {
     const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
@@ -85,3 +93,13 @@ document.querySelectorAll('.output-toggle-btn').forEach(function(btn) {
         }
     });
 });
+/*$('#run-test-btn').on('click', function() {
+    var test_id = $('#test-details-container').data('test-id');
+    var url = '{% url "run_test_cases" test_id=test_id %}';
+    $.post(url, {csrfmiddlewaretoken: get_token()}, function(data) {
+        var run_id = data.run_id;
+        var url = '/run_output/' + run_id + '/';
+        $('#test-history-container').load(url);
+    });
+});*/
+

@@ -26,14 +26,16 @@ def test_list(request):
     return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by, 'sort_order': sort_order})
 
 
-
 def test_details(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
     runs = test.testrun_set.order_by('-date')
     if request.method == 'POST':
-        output = run_test_cases(test)
-        return JsonResponse({'output': output})
+        # Temporarily disable button to prevent double-click
+        return HttpResponse()
+        # output = run_test_cases(request, test_id)
+        # return JsonResponse({'output': output})
     return render(request, 'test_details.html', {'test': test, 'runs': runs})
+
 
 def run_output(request, run_id):
     run = get_object_or_404(TestRun, pk=run_id)
@@ -43,14 +45,17 @@ def test_upload(request):
     if request.method == 'POST':
         form = TestUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            test_case = form.save()
+            test_case = form.save(commit=False)
+            test_case.save()
             return redirect('test_details', test_id=test_case.id)
     else:
         form = TestUploadForm()
     return render(request, 'test_upload.html', {'form': form})
 
 
+
 def run_test_cases(request, test_id):
+    print('run_test_cases called')
     test = get_object_or_404(TestCase, pk=test_id)
     # Run the uploaded script
     result = subprocess.run(['python', '-m', 'unittest', test.file.path],
@@ -83,35 +88,6 @@ def test_history(request, test_id):
     runs = test.testrun_set.order_by('-date')
     return render(request, 'test_history.html', {'test': test, 'runs': runs})
 
-
-'''
-def run_test_cases(request, test_id):
-    if request.method == 'POST':
-        test = get_object_or_404(TestCase, pk=test_id)
-        # Get the file contents
-        file_contents = test.file.read()
-        test_code = file_contents.decode('utf-8')
-        # Create a dictionary to store the execution environment
-        env = {'request': request, 'test': test}
-
-        # Execute the test case code and capture the output
-        result = subprocess.run(["python", "-c", test_code], capture_output=True, text=True)
-
-        # Check the result of the test and update the test status
-        if result.returncode == 0:
-            test.last_run_status = 'success'
-            messages.success(request, f'Test cases for test "{test.name}" ran successfully.')
-        else:
-            test.last_run_status = 'failed'
-            messages.error(request, f'Test cases for test "{test.name}" failed to run:\n{result.stderr}')
-
-        test.save()
-
-        # Render the response
-        return JsonResponse({'result': test.last_run_status, 'logs': result.stdout})
-    else:
-        return HttpResponse("Only POST requests are allowed")
-'''
 
 def delete_test_case(request, test_id):
     test_case = get_object_or_404(TestCase, pk=test_id)
