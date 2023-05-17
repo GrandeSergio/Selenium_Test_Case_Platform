@@ -1,6 +1,6 @@
 {% load static %}
 {% block content %}
-    <h2>History - {{ test.name }}</h2>
+
     <br>
     <br>
     <div class="table-container tab-content table-responsive">
@@ -10,6 +10,7 @@
                     <th>Run ID</th>
                     <th>Run At</th>
                     <th>Status</th>
+
                     <th>Output</th>
                 </tr>
             </thead>
@@ -19,6 +20,7 @@
                         <td>{{ run.id }}</td>
                         <td>{{ run.date }}</td>
                         <td>{{ run.status }}</td>
+
                         <td><a href="{% url 'run_output' run.id %}" class="btn btn-primary">View Output</a></td>
                     </tr>
                 {% empty %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from .models import TestCase, TestRun
-from .forms import TestUploadForm
+from .forms import TestUploadForm, EditCodeForm, EditTestNameForm
 import subprocess
 from django.middleware.csrf import get_token
 import logging
@@ -11,6 +11,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.utils import timezone
+from selenium import webdriver
 
 
 def test_list(request):
@@ -29,15 +30,31 @@ def test_list(request):
 def test_details(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
     runs = test.testrun_set.order_by('-date')
-    if request.method == 'POST':
-        output = run_test_cases(request, test_id)
-        return JsonResponse({'output': output})
-    return render(request, 'test_details.html', {'test': test, 'runs': runs})
+    file_path = test.file.path
+    with open(file_path, 'r', encoding='utf-8') as f:
+        file_content = f.read()
+
+    edit_mode = False
+    if 'edit' in request.GET:
+        edit_mode = True
+        if request.method == 'POST':
+            form = EditTestNameForm(request.POST, instance=test)
+            if form.is_valid():
+                form.save()
+                return redirect('test_details', test_id=test.id)
+        else:
+            form = EditTestNameForm(instance=test)
+    else:
+        form = EditCodeForm(initial={'code': file_content})
+
+    return render(request, 'test_details.html', {'test': test, 'runs': runs, 'form': form, 'file_content': file_content, 'edit_mode': edit_mode})
+
 
 
 def run_output(request, run_id):
     run = get_object_or_404(TestRun, pk=run_id)
     return render(request, 'run_output.html', {'run': run})
+
 
 def test_upload(request):
     if request.method == 'POST':
@@ -51,10 +68,22 @@ def test_upload(request):
     return render(request, 'test_upload.html', {'form': form})
 
 
-
 def run_test_cases(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
-    # Run the uploaded script
+
+    # Get the mode selected by the user
+    mode = request.POST.get('mode')
+
+    if mode == 'batch':
+        # Run the script in headless mode
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        driver = webdriver.Chrome(options=options)
+    else:
+        # Run the script in windowed mode
+        options = webdriver.ChromeOptions()
+        driver = webdriver.Chrome(options=options)
+
     result = subprocess.run(['python', '-m', 'unittest', test.file.path],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     output = result.stderr
@@ -79,6 +108,8 @@ def run_test_cases(request, test_id):
     test_run.save()
 
     return JsonResponse({'output': output})
+
+
 
 def test_history(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)

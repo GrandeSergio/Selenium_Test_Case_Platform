@@ -7,9 +7,10 @@
     <table class="table table-sm">
       <thead>
         <tr>
-        <th><a href="?{% if page %}page={{ page }}&{% endif %}sort_by=id{% if sort_by == 'id' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Script ID</a></th>
-        <th><a href="?{% if page %}page={{ page }}&{% endif %}sort_by=name{% if sort_by == 'name' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Name</a></th>
-        <th><a href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_status{% if sort_by == 'last_run_status' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Status</a></th>
+        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=id{% if sort_by == 'id' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Script ID</a></th>
+        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=name{% if sort_by == 'name' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Name</a></th>
+        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_status{% if sort_by == 'last_run_status' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Status</a></th>
+        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_date{% if sort_by == 'last_run_date' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Date</a></th>
         <th>Go to</th>
         </tr>
       </thead>
@@ -19,6 +20,7 @@
           <td>{{ test.id }}</td>
           <td>{{ test.name }}</td>
           <td>{{ test.last_run_status }}</td>
+          <td>{{ test.last_run_date }}</td>
           <td><a href="{% url 'test_details' test_id=test.id %}" class="btn btn-dark">Details</a></td>
         </tr>
         {% empty %}

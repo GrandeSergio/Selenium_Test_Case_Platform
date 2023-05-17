@@ -8,6 +8,7 @@
     <title>{% block title %}My Site{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
@@ -34,12 +35,25 @@
             </div>
         </nav>
     </header>
-    <div class="panel panel-default panel-horizontal">
+    <div class="panel panel-default panel-horizontal panel-top">
       <div class="panel-heading">
         <div class="panel-title">
           <div class="button-container">
-            <a href="javascript:history.back()" class="btn btn-default"><i class="fa fa-arrow-left"></i> Go Back</a>
-            <a href="#" class="btn btn-default" onclick="window.location.reload();"><i class="fa fa-refresh"></i> Refresh</a>
+            <a href="javascript:history.back()" class="btn btn-default"><i class="fa fa-arrow-left"></i><lord-icon
+                src="https://cdn.lordicon.com/zmkotitn.json"
+                trigger="hover"
+                colors="primary:#121331"
+                class="icon"
+                style="transform: scaleX(-1);"
+            >
+            </lord-icon> Go Back</a>
+            <a href="#" class="btn btn-default" onclick="window.location.reload();"><i class="fa fa-refresh"></i>
+                <lord-icon
+                    src="https://cdn.lordicon.com/akuwjdzh.json"
+                    trigger="hover"
+                    colors="primary:#121331"
+                    style="width:18px;height:18px; transform: scale(1.5); transform-origin: center; vertical-align: middle; margin-bottom: 2px;">
+                </lord-icon>  Refresh</a>
           </div>
         </div>
       </div>
@@ -48,24 +62,25 @@
         {% endblock %}
       </div>
     </div>
-    <main class="container">
+    <div class="main-container">
+        <main class="container ">
 
         {% block content %}
         {% endblock %}
-    </main>
+        </main>
+    </div>
+    <!--
     <footer id="footer" class="text-center py-3 bg-dark text-white">
         &copy; {{ year }} My Site
     </footer>
+    -->
     {% block scripts %}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
         <script src="{% static 'js/test_details.js' %}"></script>
-
-
-        <script src="{% static 'js/jquery.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
     {% endblock %}
 </body>

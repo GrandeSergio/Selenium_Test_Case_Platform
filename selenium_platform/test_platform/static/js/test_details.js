@@ -45,20 +45,52 @@ $(document).ready(function() {
     const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
     const testId = $('tr[data-test-id]:first').data('test-id');
     console.log('test ', testId)
+
     $('#run-test-btn').click(function() {
-      $.ajax({
-        type: 'POST',
-        data: {
-                csrfmiddlewaretoken: csrfToken,
-        },
-        url: "/"+testId+"/run/",
-        success: function(data) {
-          alert(data.result);
-        },
-        error: function() {
-          alert('Error running test.');
-        }
-      });
+        // Display sweetalert2 popup with options
+        Swal.fire({
+            title: 'Choose running mode',
+            showCancelButton: true,
+            confirmButtonText: 'Batch mode',
+            cancelButtonText: 'Foreground mode',
+            reverseButtons: true,
+            icon: 'info',
+            darkMode: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User selected batch mode
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: csrfToken,
+                        mode: 'batch'
+                    },
+                    url: "/"+testId+"/run/",
+                    success: function(data) {
+                        alert(data.result);
+                    },
+                    error: function() {
+                        alert('Error running test.');
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // User selected foreground mode
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: csrfToken,
+                        mode: 'foreground'
+                    },
+                    url: "/"+testId+"/run/",
+                    success: function(data) {
+                        alert(data.result);
+                    },
+                    error: function() {
+                        alert('Error running test.');
+                    }
+                });
+            }
+        });
     });
 
     $('#delete-test-btn').click(function() {
@@ -80,6 +112,7 @@ $(document).ready(function() {
     });
 
 });
+
 // Add click event listener to toggle button
 document.querySelectorAll('.output-toggle-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -93,13 +126,6 @@ document.querySelectorAll('.output-toggle-btn').forEach(function(btn) {
         }
     });
 });
-/*$('#run-test-btn').on('click', function() {
-    var test_id = $('#test-details-container').data('test-id');
-    var url = '{% url "run_test_cases" test_id=test_id %}';
-    $.post(url, {csrfmiddlewaretoken: get_token()}, function(data) {
-        var run_id = data.run_id;
-        var url = '/run_output/' + run_id + '/';
-        $('#test-history-container').load(url);
-    });
-});*/
+
+
 

@@ -1,5 +1,12 @@
+
 :root {
   --max-width: 1200px;
+  --main-color: #222831;
+  --second-color: #424e5f;
+  --third-color: #6b7d98;
+  --button-color: #343a40;
+  --button-color-hover: #4b545c;
+  --font-color: #dedede;
 }
 
 body {
@@ -7,12 +14,24 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: var(--max-width);
-  background-color: #222;
+  background-color: var(--main-color);
   color: #eee;
 }
 .navbar{
     height: 50px;
+    background-color: var(--main-color) !important;
+    border-bottom: 2px solid var(--second-color) !important;
 }
+
+.nav-item{
+    border-color: var(--main-color);
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--third-color);
+    border-color: var(--second-color);
+}
+
 .container{
   margin: auto;
   margin-left: auto;
@@ -73,8 +92,8 @@ label {
 
 /* Override the default button background color */
 .btn-dark {
-    background-color: #343a40;
-    border-color: #343a40;
+    background-color: var(--button-color);
+    border-color: var(--button-color);
     color: #dedede;
 }
 .btn-danger {
@@ -84,8 +103,8 @@ label {
 /* Override the default button text color */
 .btn-dark:hover {
     color: #fff;
-    background-color: #4b545c;
-    border-color: #4b545c;
+    background-color: var(--button-color-hover);
+    border-color: var(--button-color-hover);
 }
 
 .custom-file-input.custom-file-input {
@@ -98,16 +117,17 @@ label {
 }
 
 input[type="file"]::file-selector-button {
-  background-color: #343a40;
+
   color: #dedede;
 
 }
 
-input[type="file"]::file-selector-button:hover {
-    color: #fff;
-    background-color: #4b545c;
-    border-color: #4b545c;
+
+
+input::file-selector-button {
+display: none;
 }
+
 
 
 .panel-horizontal .panel-heading {
@@ -138,8 +158,20 @@ input[type="file"]::file-selector-button:hover {
   bottom: 5%;
   left: 0;
   width: 100%;
-
 }
+
+.pagination .page-item .page-link {
+  background-color: var(--third-color) !important;
+  border: 0.1px solid !important;
+  border-color: var(--third-color) !important;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--second-color) !important;
+  border: 0.1px solid !important;
+  border-color: var(--third-color) !important;
+}
+
 .table-container {
     max-height: 500px;
     overflow-y: auto;
@@ -152,7 +184,7 @@ input[type="file"]::file-selector-button:hover {
 
 
 .show-more-btn {
-  background-color: #4CAF50;
+  background-color: var(--button-color);
   border: none;
   color: white;
   padding: 8px 16px;
@@ -182,4 +214,67 @@ input[type="file"]::file-selector-button:hover {
 .centered {
   display: block;
   margin: 0 auto;
+}
+
+.code-container {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    max-height: 600px;
+    padding: 10px;
+
+}
+
+.code-container pre {
+    display: inline-block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: monospace;
+}
+
+.my-custom-class {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.my-custom-class:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #4d90fe;
+}
+
+.my-custom-class:hover {
+    color: #fff;
+    background-color: #4b545c;
+    border-color: #4b545c;
+}
+
+.main-container{
+    background-color: var(--second-color);
+    min-height: calc(100vh - 160px);
+    border-radius: 7px;
+    margin-top: 10px;
+}
+.panel-top{
+    margin-top: 10px;
+    background-color: var(--second-color);
+    border-radius: 7px;
+}
+
+.header-sort{
+color: var(--font-color) !important;
+}
+
+.icon{
+    width:18px;
+    height:18px;
+    transform: scale(1.5);
+    transform-origin: center;
+    vertical-align: middle;
+    margin-bottom: 2px;
 }

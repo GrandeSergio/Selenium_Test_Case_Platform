@@ -3,12 +3,41 @@
 {% csrf_token %}
 {% block content %}
     <h2>{{ test.name }}</h2>
+    {% if edit_mode %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary"><lord-icon
+                src="https://cdn.lordicon.com/egiwmiit.json"
+                trigger="hover"
+                colors="primary:#121331"
+                class="icon">
+            </lord-icon></button>
+            <a href="{% url 'test_details' test_id=test.id %}" class="btn btn-secondary"><lord-icon
+                src="https://cdn.lordicon.com/nhfyhmlt.json"
+                trigger="hover"
+                colors="primary:#121331"
+                class="icon">
+            </lord-icon></a>
+        </form>
+    {% else %}
+        <button class="btn btn-secondary" onclick="location.href='{% url 'test_details' test_id=test.id %}?edit'"><lord-icon
+    src="https://cdn.lordicon.com/wloilxuq.json"
+    trigger="hover"
+    colors="primary:#121331,secondary:#121331"
+    state="hover-2"
+    class="icon">
+</lord-icon> Edit Name</button>
+    {% endif %}
     <a href="{% url 'test_list' %}" class="btn btn-dark">Back to Test List</a>
     <br>
     <br>
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#details" role="tab">General</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#code" role="tab">Code</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#history" role="tab">History</a>
@@ -32,16 +61,42 @@
                     <td>{{ test.last_run_status }}</td>
                     <td>{{ test.last_run_date }}</td>
                     <td>
-                        <button id="delete-test-btn" class="btn btn-danger">Delete Test</button>
-                        <button id="run-test-btn" class="btn btn-dark">Run Test</button>
+                        <button id="delete-test-btn" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Test Case">
+                          <lord-icon
+                            src="https://cdn.lordicon.com/kfzfxczd.json"
+                            trigger="hover"
+                            colors="primary:#121331"
+                            class="icon">
+
+                          </lord-icon>
+                        </button>
+                        <button id="run-test-btn" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Run Test">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/xddtsyvc.json"
+                                trigger="hover"
+                                colors="primary:#121331"
+                                state="hover"
+                                class="icon">
+
+                            </lord-icon>
+                        </button>
                     </td>
                 </tr>
             </table>
+        </div>
+        <div class="tab-pane" id="code" role="tabpanel">
+            {% include 'test_code.html' with file_content=file_content test=test %}
         </div>
         <div class="tab-pane" id="history" role="tabpanel">
            {% include 'test_history.html' %}
         </div>
     </div>
+
+<script>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>
 
 <script src="{% static 'js/test_history.js' %}"></script>
 {% endblock %}

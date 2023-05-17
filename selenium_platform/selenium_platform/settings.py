@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'crispy_forms',
     'crispy_bootstrap5',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+DATE_FORMAT = 'd/m/Y'
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'

@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-  {% for test in tests %}
-    <div>
-      <a href="{% url 'test_details' test_id=test.id %}">{{ test.name }}</a>
-    </div>
-  {% endfor %}
-{% endblock %}
