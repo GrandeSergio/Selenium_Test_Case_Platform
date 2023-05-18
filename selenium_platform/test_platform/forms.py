@@ -15,7 +15,7 @@ class TestUploadForm(forms.ModelForm):
 
 
 class EditCodeForm(forms.Form):
-    code = forms.CharField(widget=forms.Textarea(attrs={'rows':80, 'cols':130}))
+    code = forms.CharField(widget=forms.Textarea(attrs={'rows':20, 'cols':130}))
 
 class EditTestNameForm(forms.ModelForm):
     class Meta:

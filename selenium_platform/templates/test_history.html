@@ -1,16 +1,13 @@
 {% load static %}
 {% block content %}
 
-    <br>
-    <br>
-    <div class="table-container tab-content table-responsive">
+    <div class="table-container">
         <table class="table table-sm" id="runs-table">
             <thead>
                 <tr>
                     <th>Run ID</th>
                     <th>Run At</th>
                     <th>Status</th>
-
                     <th>Output</th>
                 </tr>
             </thead>
@@ -20,7 +17,6 @@
                         <td>{{ run.id }}</td>
                         <td>{{ run.date }}</td>
                         <td>{{ run.status }}</td>
-
                         <td><a href="{% url 'run_output' run.id %}" class="btn btn-primary">View Output</a></td>
                     </tr>
                 {% empty %}

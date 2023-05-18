@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.utils import timezone
 from selenium import webdriver
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 
 def test_list(request):
@@ -26,6 +28,21 @@ def test_list(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by, 'sort_order': sort_order})
 
+def replace_file(request, test_id):
+    test = get_object_or_404(TestCase, pk=test_id)
+
+    if request.method == 'POST':
+        file = request.FILES.get('file')
+
+        if file:
+            # Delete the old file
+            if test.file:
+                default_storage.delete(test.file.path)
+
+            # Save the new file
+            test.file.save(file.name, ContentFile(file.read()))
+
+    return redirect('test_details', test_id=test_id)
 
 def test_details(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
@@ -47,8 +64,13 @@ def test_details(request, test_id):
     else:
         form = EditCodeForm(initial={'code': file_content})
 
-    return render(request, 'test_details.html', {'test': test, 'runs': runs, 'form': form, 'file_content': file_content, 'edit_mode': edit_mode})
+    return render(request, 'test_details.html',
+                  {'test': test, 'runs': runs, 'form': form, 'file_content': file_content, 'edit_mode': edit_mode})
 
+
+def test_history_list(request):
+    test_runs = TestRun.objects.all().order_by('-date')
+    return render(request, 'test_history_list.html', {'test_runs': test_runs})
 
 
 def run_output(request, run_id):

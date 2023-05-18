@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h3>Test History</h3>
+    <div class="table-container">
+        <table class="table table-sm" id="history-table">
+            <thead>
+                <tr>
+                    <th>Test Case</th>
+                    <th>Last Run Status</th>
+                    <th>Last Run Date</th>
+                    <th>Go To</th>
+                    <th>Console Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test_run in test_runs %}
+                    <tr>
+                        <td>{{ test_run.test.name }}</td>
+                        <td>{{ test_run.test.last_run_status }}</td>
+                        <td>{{ test_run.test.last_run_date }}</td>
+                        <td><a href="{% url 'test_details' test_id=test_run.test.id %}" class="btn btn-dark">Test Case</a></td>
+                        <td><a href="{% url 'run_output' run_id=test_run.id %}" class="btn btn-primary">View Output</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<script src="{% static 'js/test_history_list.js' %}"></script>
+{% endblock %}

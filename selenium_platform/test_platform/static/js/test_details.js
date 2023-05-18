@@ -127,5 +127,62 @@ document.querySelectorAll('.output-toggle-btn').forEach(function(btn) {
     });
 });
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+
+document.querySelector('[name="replace-file"]').addEventListener('click', function() {
+    showReplaceModal();
+});
+
+function showReplaceModal() {
+    Swal.fire({
+        title: 'Replace File',
+        html: `
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="file">File:</label>
+                    <input type="file" class="form-control-file" id="file" name="file">
+                </div>
+            </form>`,
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+        cancelButtonText: 'Close',
+        preConfirm: () => {
+            const fileInput = Swal.getPopup().querySelector('#file');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                return fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(`Request failed: ${error}`);
+                });
+            }
+
+            return null;
+        },
+    })
+    .then(result => {
+        if (result.isConfirmed) {
+            Swal.fire('File uploaded successfully!');
+            // Additional actions after successful upload
+        }
+    });
+}
+
+
 
 
