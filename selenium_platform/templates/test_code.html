@@ -6,20 +6,5 @@
     <pre class="code-text">{{ file_content }}</pre>
 </div>
 
-<!--
-<div class="table-container code-container">
-    <button id="edit-btn" class="btn btn-dark">Edit</button>
-    <div class="code-container2">
-        <pre class="code-text">{{ file_content }}</pre>
-        <form method="post" id="form" class="code-container2">
-            {% csrf_token %}
-            {{ form.as_p }}
-        <button id="save-btn" type="button" class="btn btn-dark">Save</button>
-        </form>
-    </div>
-
-</div>
-<script src="{% static 'js/test_code.js' %}"></script>
--->
 {% endblock %}
 

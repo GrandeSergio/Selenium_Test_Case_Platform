@@ -44,7 +44,7 @@ function sweetAlertConfirm(callback) {
 $(document).ready(function() {
     const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
     const testId = $('tr[data-test-id]:first').data('test-id');
-    console.log('test ', testId)
+
 
     $('#run-test-btn').click(function() {
         // Display sweetalert2 popup with options
@@ -135,20 +135,22 @@ $(function () {
 document.querySelector('[name="replace-file"]').addEventListener('click', function() {
     showReplaceModal();
 });
-
 function showReplaceModal() {
+    const testId = $('tr[data-test-id]:first').data('test-id');
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    const replaceFileUrl = document.querySelector('#replace-file-btn').dataset.url;
+
     Swal.fire({
         title: 'Replace File',
         html: `
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+            <form method="post" enctype="multipart/form-data" action="${replaceFileUrl}">
                 <div class="form-group">
-                    <label for="file">File:</label>
+                    <label for="file">New File:</label>
                     <input type="file" class="form-control-file" id="file" name="file">
                 </div>
             </form>`,
         showCancelButton: true,
-        confirmButtonText: 'Upload',
+        confirmButtonText: 'Replace',
         cancelButtonText: 'Close',
         preConfirm: () => {
             const fileInput = Swal.getPopup().querySelector('#file');
@@ -157,8 +159,9 @@ function showReplaceModal() {
             if (file) {
                 const formData = new FormData();
                 formData.append('file', file);
+                formData.append('csrfmiddlewaretoken', csrfToken);
 
-                return fetch('/upload', {
+                return fetch(replaceFileUrl, {
                     method: 'POST',
                     body: formData,
                 })
@@ -177,11 +180,12 @@ function showReplaceModal() {
     })
     .then(result => {
         if (result.isConfirmed) {
-            Swal.fire('File uploaded successfully!');
-            // Additional actions after successful upload
+            Swal.fire('File replaced successfully!');
+            // Optional: Perform any additional actions after successful replacement
         }
     });
 }
+
 
 
 

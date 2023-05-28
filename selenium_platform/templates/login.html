@@ -1,0 +1,63 @@
+{% extends 'base_user_login.html' %}
+{% load static %}
+{% block content %}
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card text-white">
+          <div class="card-body p-5 text-center login-container">
+
+            <div class="mb-md-5 mt-md-4 pb-5">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <p class="text-white-50 mb-5">Enter your login and password</p>
+              {% if error_message %}
+                <p>{{ error_message }}</p>
+              {% endif %}
+
+              <form method="POST">
+                {% csrf_token %}
+                <div class="form-outline form-white mb-4">
+                  <label for="username" class="form-label">Username</label>
+                  <input type="text" id="username" class="form-control form-control-lg" name="username" required><br>
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" id="password" class="form-control form-control-lg" name="password" required><br>
+                </div>
+                <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="{% url 'password_reset' %}">Forgot password?</a></p>
+
+              <button class="btn btn-dark px-5" type="submit">Login</button>
+              </form>
+
+            </div>
+
+            <div>
+              <p class="mb-0">Don't have an account? <a href="{% url 'register' %}" class="text-white-50 fw-bold">Sign Up</a>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Bootstrap toast -->
+{% if messages %}
+
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script>
+    var toastMessages = [
+      {% for message in messages %}
+        "{{ message }}",
+      {% endfor %}
+    ];
+  </script>
+<script src="{% static 'js/login.js' %}"></script>
+{% endif %}
+
+{% endblock %}

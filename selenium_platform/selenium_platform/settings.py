@@ -98,13 +98,14 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+LOGOUT_REDIRECT_URL = 'home'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'test_platform', 'static')
 ]
-
+#AUTH_USER_MODEL = 'test_platform.CustomUser'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

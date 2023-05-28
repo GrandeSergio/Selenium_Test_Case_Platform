@@ -4,14 +4,22 @@
   <div class="container">
     <h3>Test List</h3>
 
+    <!-- Add search form -->
+    <form method="GET" action="{% url 'test_list' %}">
+      <div class="form-group">
+        <input type="text" name="search" placeholder="Search..." class="form-control" value="{{ search }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+
     <table class="table table-sm">
       <thead>
         <tr>
-        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=id{% if sort_by == 'id' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Script ID</a></th>
-        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=name{% if sort_by == 'name' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Name</a></th>
-        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_status{% if sort_by == 'last_run_status' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Status</a></th>
-        <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_date{% if sort_by == 'last_run_date' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Date</a></th>
-        <th>Go to</th>
+          <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=id{% if sort_by == 'id' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Script ID</a></th>
+          <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=name{% if sort_by == 'name' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Name</a></th>
+          <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_status{% if sort_by == 'last_run_status' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Status</a></th>
+          <th><a class="header-sort" href="?{% if page %}page={{ page }}&{% endif %}sort_by=last_run_date{% if sort_by == 'last_run_date' and sort_order == 'asc' %}&sort_order=desc{% endif %}">Last Run Date</a></th>
+          <th>Go to</th>
         </tr>
       </thead>
       <tbody>
@@ -61,4 +69,5 @@
       </ul>
     </nav>
   </div>
+
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from .models import TestCase, TestRun
-from .forms import TestUploadForm, EditCodeForm, EditTestNameForm
+from .forms import TestUploadForm, EditCodeForm, EditTestNameForm, RegistrationForm
 import subprocess
 from django.middleware.csrf import get_token
 import logging
@@ -14,19 +14,34 @@ from django.utils import timezone
 from selenium import webdriver
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.db.models import Q
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
 
 
 def test_list(request):
+
     sort_by = request.GET.get('sort_by', 'name')
     sort_order = request.GET.get('sort_order', 'asc')
     if sort_order == 'asc':
         tests = TestCase.objects.all().order_by(sort_by)
     else:
         tests = TestCase.objects.all().order_by(f'-{sort_by}')
+
+    search_query = request.GET.get('search')
+    if search_query:
+        # Filter the tests based on the search query
+        tests = tests.filter(Q(name__icontains=search_query))
+
     paginator = Paginator(tests, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by, 'sort_order': sort_order})
+    return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by, 'sort_order': sort_order, 'search': search_query})
 
 def replace_file(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
@@ -161,3 +176,73 @@ def upload(request):
             test_case_url = reverse('test_details', kwargs={'test_id': test_case.id})
             return JsonResponse({'success': True, 'test_case_url': test_case_url})
     return render(request, 'upload.html')
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('test_list')
+        else:
+            error_message = 'Invalid username or password.'
+            messages.error(request, error_message)  # Add error message to display as a toast
+            return render(request, 'login.html')
+    return render(request, 'login.html')
+
+@login_required
+def user_details(request):
+    return render(request, 'user_details.html')
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        # Additional logic before deleting the account if needed
+        user.delete()
+        logout(request)
+        messages.success(request, 'Your account has been successfully deleted.')
+        return redirect('login')  # Redirect to the desired URL after deletion
+    else:
+        # Handle GET request if needed
+        return redirect('user_details')  # Redirect to the user details page
+
+'''
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password has been changed successfully.')
+            return redirect('user_details')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'change_password.html', {'form': form})
+'''
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    success_url = reverse_lazy('change_password_done')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        # Add a success message
+        messages.success(self.request, 'Password changed successfully.')
+        print('changed')
+
+        return response

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-3">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'user_details' %}">Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_password' %}">Change Password</a>
+          </li>
+          <!-- Add more sidebar links as needed -->
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <!-- Main content -->
+      <h1>User Details</h1>
+      <p>Username: {{ user.username }}</p>
+      <p>Email: {{ user.email }}</p>
+
+      <!-- Add more user details as needed -->
+      <button id="delete-account-btn" class="btn btn-danger">Delete Account</button>
+
+      <!-- Add more user details as needed -->
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-dark">Logout</button>
+      </form>
+      <form id="delete-account-form" action="{% url 'delete_account' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" style="display: none;"></button>
+      </form>
+    </div>
+  </div>
+
+<script src="{% static 'js/user_details.js' %}"></script>
+{% endblock %}
