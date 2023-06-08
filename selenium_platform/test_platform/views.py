@@ -24,24 +24,45 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
 
+@login_required
 def test_list(request):
+    # Retrieve the search parameters from the GET request
+    search_name = request.GET.get('search_name', '')
+    search_script_id = request.GET.get('search_script_id', '')
+    search_last_run_status = request.GET.get('search_last_run_status', '')
+    search_last_run_date = request.GET.get('search_last_run_date', '')
 
+    # Filter the tests queryset based on the search parameters and the current user
+    tests = TestCase.objects.filter(user=request.user)
+    if search_name:
+        tests = tests.filter(name__icontains=search_name)
+    if search_script_id:
+        tests = tests.filter(id__icontains=search_script_id)
+    if search_last_run_status:
+        tests = tests.filter(last_run_status__icontains=search_last_run_status)
+    if search_last_run_date:
+        tests = tests.filter(last_run_date__icontains=search_last_run_date)
+
+    # Sorting logic
     sort_by = request.GET.get('sort_by', 'name')
     sort_order = request.GET.get('sort_order', 'asc')
-    if sort_order == 'asc':
-        tests = TestCase.objects.all().order_by(sort_by)
+    if sort_order == 'desc':
+        tests = tests.order_by(f"-{sort_by}")
     else:
-        tests = TestCase.objects.all().order_by(f'-{sort_by}')
+        tests = tests.order_by(sort_by)
 
-    search_query = request.GET.get('search')
-    if search_query:
-        # Filter the tests based on the search query
-        tests = tests.filter(Q(name__icontains=search_query))
-
-    paginator = Paginator(tests, 10)
+    paginator = Paginator(tests, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by, 'sort_order': sort_order, 'search': search_query})
+    return render(request, 'test_list.html', {'page_obj': page_obj, 'sort_by': sort_by,
+                                              'sort_order': sort_order,
+                                              'search_name': search_name,
+                                              'search_script_id': search_script_id,
+                                              'search_last_run_status': search_last_run_status,
+                                              'search_last_run_date': search_last_run_date,
+                                              }
+                  )
+
 
 def replace_file(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
@@ -58,6 +79,7 @@ def replace_file(request, test_id):
             test.file.save(file.name, ContentFile(file.read()))
 
     return redirect('test_details', test_id=test_id)
+
 
 def test_details(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
@@ -84,8 +106,38 @@ def test_details(request, test_id):
 
 
 def test_history_list(request):
-    test_runs = TestRun.objects.all().order_by('-date')
-    return render(request, 'test_history_list.html', {'test_runs': test_runs})
+    test_runs = TestRun.objects.all()
+    # Retrieve the search parameters from the GET request
+    search_run_id = request.GET.get('search_run_id', '')
+    search_name = request.GET.get('search_name', '')
+    search_script_id = request.GET.get('search_script_id', '')
+    search_last_run_status = request.GET.get('search_last_run_status', '')
+    search_last_run_date = request.GET.get('search_last_run_date', '')
+
+    # Filter the tests queryset based on the search parameters
+    if search_run_id:
+        test_runs = test_runs.filter(id__icontains=search_run_id)
+    if search_name:
+        test_runs = test_runs.filter(name__icontains=search_name)
+    if search_script_id:
+        test_runs = test_runs.filter(test__id__icontains=search_script_id)
+    if search_last_run_status:
+        test_runs = test_runs.filter(status__icontains=search_last_run_status)
+    if search_last_run_date:
+        test_runs = test_runs.filter(date__icontains=search_last_run_date)
+
+    # Sorting logic
+    sort_by = request.GET.get('sort_by', 'date')
+    sort_order = request.GET.get('sort_order', 'desc')
+    if sort_order == 'desc':
+        test_runs = test_runs.order_by(f"-{sort_by}")
+    else:
+        test_runs = test_runs.order_by(sort_by)
+
+    paginator = Paginator(test_runs, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'test_history_list.html', {'test_runs': test_runs, 'page_obj': page_obj})
 
 
 def run_output(request, run_id):
@@ -147,7 +199,6 @@ def run_test_cases(request, test_id):
     return JsonResponse({'output': output})
 
 
-
 def test_history(request, test_id):
     test = get_object_or_404(TestCase, pk=test_id)
     runs = test.testrun_set.order_by('-date')
@@ -167,15 +218,17 @@ def delete_test_case(request, test_id):
 
     return render(request, 'test_delete.html', {'test': test_case})
 
+@login_required
 def upload(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         file = request.FILES.get('file')
         if name and file:
-            test_case = TestCase.objects.create(name=name, file=file)
+            test_case = TestCase.objects.create(user=request.user, name=name, file=file)
             test_case_url = reverse('test_details', kwargs={'test_id': test_case.id})
             return JsonResponse({'success': True, 'test_case_url': test_case_url})
     return render(request, 'upload.html')
+
 
 def register(request):
     if request.method == 'POST':
@@ -186,6 +239,7 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -201,9 +255,11 @@ def user_login(request):
             return render(request, 'login.html')
     return render(request, 'login.html')
 
+
 @login_required
 def user_details(request):
     return render(request, 'user_details.html')
+
 
 @login_required
 def delete_account(request):
@@ -218,31 +274,41 @@ def delete_account(request):
         # Handle GET request if needed
         return redirect('user_details')  # Redirect to the user details page
 
-'''
+
 @login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Your password has been changed successfully.')
-            return redirect('user_details')
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-
-    return render(request, 'change_password.html', {'form': form})
-'''
+    return render(request, 'change_password.html', {
+        'form': form
+    })
 
 
 class CustomPasswordChangeView(PasswordChangeView):
-    success_url = reverse_lazy('change_password_done')
+    template_name = 'change_password.html'
+    success_url = reverse_lazy('change_password')
 
     def form_valid(self, form):
         response = super().form_valid(form)
 
-        # Add a success message
+        # Add a success message when the password is changed
         messages.success(self.request, 'Password changed successfully.')
-        print('changed')
+
+        return response
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+
+        # Add an error message when something went wrong
+        messages.error(self.request, 'Failed to change password.')
 
         return response

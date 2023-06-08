@@ -3,29 +3,174 @@
 
 {% block content %}
     <h3>Test History</h3>
-    <div class="table-container">
+    <div class="container">
         <table class="table table-sm" id="history-table">
             <thead>
                 <tr>
-                    <th>Test Case</th>
-                    <th>Last Run Status</th>
-                    <th>Last Run Date</th>
+                    <th>
+                        <div class="dropdown">
+                          <a class="header-sort dropdown-toggle" href="#" role="button" id="runidDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Run ID
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="runidDropdown">
+                            <a class="dropdown-item" href="?sort_by=id&sort_order=asc">Sort A-Z</a>
+                            <a class="dropdown-item" href="?sort_by=id&sort_order=desc">Sort Z-A</a>
+                            <div class="dropdown-divider"></div>
+                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
+                              <input type="hidden" name="sort_by" value="id">
+                              <input type="hidden" name="sort_order" value="asc">
+                              <input type="text" name="search_run_id" placeholder="Search Run ID..." class="form-control" value="{{ search_run_id }}">
+                              <div class="d-flex justify-content-center">
+                                <div class="dropdown-submit">
+                                <button id="Dropdown-search" type="submit" class="btn btn-primary">Search</button>
+                                <button id="Dropdown-reset" type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                          <a class="header-sort dropdown-toggle" href="#" role="button" id="idDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Script ID
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="idDropdown">
+                            <a class="dropdown-item" href="?sort_by=id&sort_order=asc">Sort A-Z</a>
+                            <a class="dropdown-item" href="?sort_by=id&sort_order=desc">Sort Z-A</a>
+                            <div class="dropdown-divider"></div>
+                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
+                              <input type="hidden" name="sort_by" value="id">
+                              <input type="hidden" name="sort_order" value="asc">
+                              <input type="text" name="search_script_id" placeholder="Search Script ID..." class="form-control" value="{{ search_script_id }}">
+                              <div>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                          <a class="header-sort dropdown-toggle" href="#" role="button" id="nameDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Name
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="nameDropdown">
+                            <a class="dropdown-item" href="?sort_by=name&sort_order=asc">Sort A-Z</a>
+                            <a class="dropdown-item" href="?sort_by=name&sort_order=desc">Sort Z-A</a>
+                            <div class="dropdown-divider"></div>
+                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
+                              <input type="hidden" name="sort_by" value="name">
+                              <input type="hidden" name="sort_order" value="asc">
+                              <input type="text" name="search_name" placeholder="Search Name..." class="form-control" value="{{ search_name }}">
+                              <div>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                          <a class="header-sort dropdown-toggle" href="#" role="button" id="lastRunStatusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Last Run Status
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="lastRunStatusDropdown">
+                            <a class="dropdown-item" href="?sort_by=last_run_status&sort_order=asc">Sort A-Z</a>
+                            <a class="dropdown-item" href="?sort_by=last_run_status&sort_order=desc">Sort Z-A</a>
+                            <div class="dropdown-divider"></div>
+                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
+                              <input type="hidden" name="sort_by" value="last_run_status">
+                              <input type="hidden" name="sort_order" value="asc">
+                              <input type="text" name="search_last_run_status" placeholder="Search Last Run Status..." class="form-control" value="{{ search_last_run_status }}">
+                              <div>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="dropdown">
+                          <a class="header-sort dropdown-toggle" href="#" role="button" id="lastRunDateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Last Run Date
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="lastRunDateDropdown">
+                            <a class="dropdown-item" href="?sort_by=last_run_date&sort_order=asc">Sort A-Z</a>
+                            <a class="dropdown-item" href="?sort_by=last_run_date&sort_order=desc">Sort Z-A</a>
+                            <div class="dropdown-divider"></div>
+                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
+                              <input type="hidden" name="sort_by" value="last_run_date">
+                              <input type="hidden" name="sort_order" value="asc">
+                              <input type="text" name="search_last_run_date" placeholder="Search Last Run Date..." class="form-control" value="{{ search_last_run_date }}">
+                              <div>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </th>
                     <th>Go To</th>
                     <th>Console Output</th>
                 </tr>
             </thead>
             <tbody>
-                {% for test_run in test_runs %}
+                {% for test_run in page_obj %}
                     <tr>
+                        <td>{{ test_run.id }}</td>
+                        <td>{{ test_run.test.id }}</td>
                         <td>{{ test_run.test.name }}</td>
-                        <td>{{ test_run.test.last_run_status }}</td>
-                        <td>{{ test_run.test.last_run_date }}</td>
+                        <td>{{ test_run.status }}</td>
+                        <td>{{ test_run.date|date:"d-m-Y H:i:s" }}</td>
                         <td><a href="{% url 'test_details' test_id=test_run.test.id %}" class="btn btn-dark">Test Case</a></td>
                         <td><a href="{% url 'run_output' run_id=test_run.id %}" class="btn btn-primary">View Output</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">No runs found.</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <div class="panel panel-pagination panel-default panel-horizontal">
+          <nav aria-label="Test run list pagination">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&laquo;</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&lt;</a>
+              </li>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                  <li class="page-item active">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                  </li>
+                {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&gt;</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&raquo;</a>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
     </div>
 <script src="{% static 'js/test_history_list.js' %}"></script>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <h3>Test Output - {{ run.date }}</h3>
+    <h3>Test Output: {{ run.date|date:"d-m-Y H:i:s" }}</h3>
     <div class="container2">
         <pre>{{ run.output }}</pre>
     </div>

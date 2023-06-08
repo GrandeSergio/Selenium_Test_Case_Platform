@@ -1,4 +1,4 @@
-const table = document.getElementById('history-table');
+/*const table = document.getElementById('history-table');
 const tbody = table.querySelector('tbody');
 const rows = tbody.querySelectorAll('tr');
 const maxRows = 13; // Maximum number of rows to show at once
@@ -35,4 +35,4 @@ if (rows.length > maxRows) {
     // Add the button to the container
     const container = table.parentNode;
     container.insertBefore(showMoreBtn, table.nextSibling);
-}
+}*/

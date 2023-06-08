@@ -88,6 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 DATE_FORMAT = 'd/m/Y'
 LANGUAGE_CODE = 'en-us'
 

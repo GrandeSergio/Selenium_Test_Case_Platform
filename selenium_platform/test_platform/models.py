@@ -1,16 +1,20 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 
 
 class TestCase(models.Model):
-    #user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     file = models.FileField(upload_to='test_cases')
     last_run_status = models.CharField(max_length=10, blank=True, null=True)
     console_output = models.TextField(blank=True)
     upload_date = models.DateTimeField(default=timezone.now)
     last_run_date = models.DateTimeField(null=True, blank=True)
+
+    def get_formatted_upload_date(self):
+        return self.upload_date.strftime("%d-%m-%Y %H:%M:%S")
 
     def __str__(self):
         return self.name

@@ -22,7 +22,7 @@ urlpatterns = [
     path('delete-account/', views.delete_account, name='delete_account'),
     #path('change-password/', auth_views.PasswordChangeView.as_view(template_name='change_password.html'), name='change_password'),
     path('change-password/', views.CustomPasswordChangeView.as_view(template_name='change_password.html'), name='change_password'),
-    path('change-password/done/', auth_views.PasswordResetDoneView.as_view(template_name='change_password_done.html'), name='change-password_done'),
+    path('change-password/done/', auth_views.PasswordResetDoneView.as_view(template_name='change_password_done.html'), name='change_password_done'),
     #path('change-password/', views.change_password, name='change_password'),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='password_reset.html'), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),

@@ -19,28 +19,44 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="{% url 'test_list' %}">Test Platform</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'test_list' %}">Test List</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'upload' %}">Upload Test Case</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'test_history_list' %}">History</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user_details' %}">User Details</a>
-                    </li>
-                </ul>
+
+                <a class="navbar-brand" href="{% url 'test_list' %}">Test Platform</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'test_list' %}">Test List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'upload' %}">Upload Test Case</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'test_history_list' %}">History</a>
+                        </li>
+                    </ul>
+
+                <div class="navbar-right">
+                    <div class="dropdown d-flex justify-content-end">
+                          <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/bhfjfgqz.json"
+                                trigger="hover"
+                                colors="primary:#dedede"
+                                state="hover"
+                                class="icon user-icon"
+                                >
+                            </lord-icon>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'user_details' %}">Details</a>
+                            <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                          </div>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>

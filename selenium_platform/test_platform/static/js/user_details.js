@@ -17,3 +17,8 @@ document.getElementById('delete-account-btn').addEventListener('click', function
     }
   });
 });
+
+window.addEventListener('DOMContentLoaded', function() {
+    var containerHeight = document.querySelector('.main-container').offsetHeight;
+    document.getElementById('custom-row').style.height = containerHeight + 'px';
+});

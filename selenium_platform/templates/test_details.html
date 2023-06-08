@@ -62,9 +62,16 @@
                 </tr>
                 <tr>
                     <td>{{ test.name }}</td>
-                    <td>{{ test.upload_date }}</td>
+                    <td>{{ test.upload_date|date:"d-m-Y H:i:s" }}</td>
+
                     <td>{{ test.last_run_status }}</td>
-                    <td>{{ test.last_run_date }}</td>
+                    <td>
+                        {% if test.last_run_date %}
+                          {{ test.last_run_date|date:"d-m-Y H:i:s" }}
+                        {% else %}
+                            Not run yet
+                        {% endif %}
+                    </td>
                     <td>
                         <button id="delete-test-btn" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Test Case">
                           <lord-icon
