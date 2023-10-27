@@ -34,78 +34,77 @@ function sweetAlertConfirm(callback) {
     });
 }
 
-/*$(document).ready(function() {
-    // Disable the Run Test button after it has been clicked
-   $('#run-test-btn').on('click', function() {
-      $(this).prop('disabled', true);
-    });
-});*/
-
 $(document).ready(function() {
     const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
-    const testId = $('tr[data-test-id]:first').data('test-id');
-
-
     $('#run-test-btn').click(function() {
-        // Display sweetalert2 popup with options
-        Swal.fire({
-            title: 'Choose running mode',
-            showCancelButton: true,
-            confirmButtonText: 'Batch mode',
-            cancelButtonText: 'Foreground mode',
-            reverseButtons: true,
-            icon: 'info',
-            darkMode: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // User selected batch mode
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: csrfToken,
-                        mode: 'batch'
-                    },
-                    url: "/"+testId+"/run/",
-                    success: function(data) {
-                        alert(data.result);
-                    },
-                    error: function() {
-                        alert('Error running test.');
-                    }
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // User selected foreground mode
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: csrfToken,
-                        mode: 'foreground'
-                    },
-                    url: "/"+testId+"/run/",
-                    success: function(data) {
-                        alert(data.result);
-                    },
-                    error: function() {
-                        alert('Error running test.');
-                    }
-                });
+        const testId = $(this).data('test-id');
+        const runUrl = $(this).data('run-url');
+        const toastMessage = $('#toast-message'); // Get the toast message div
+
+        // Perform AJAX request without the SweetAlert2 popup
+        $.ajax({
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrfToken,
+            },
+            url: runUrl,
+            success: function(data) {
+                // Check if the test ran successfully
+                if (data.output === 'Test passed') {
+                    // Show a success toast message
+                    toastMessage.text('Test ran successfully');
+                    toastMessage.removeClass('error-toast').addClass('success-toast');
+                } else {
+                    // Show an error toast message
+                    toastMessage.text('Test failed');
+                    toastMessage.removeClass('success-toast').addClass('error-toast');
+                }
+
+                // Display the toast message for a few seconds
+                toastMessage.fadeIn(400).delay(3000).fadeOut(400);
+            },
+            error: function() {
+                // Show an error toast message for AJAX request failure
+                toastMessage.text('Error running the test. Please try again.');
+                toastMessage.removeClass('success-toast').addClass('error-toast');
+                toastMessage.fadeIn(400).delay(3000).fadeOut(400);
             }
         });
     });
 
+
+
     $('#delete-test-btn').click(function() {
+        const testId = $(this).data('test-id'); // Retrieve the test ID from the data attribute
+        const deleteUrl = $(this).data('delete-url');
+
         sweetAlertConfirm(function() {
             return $.ajax({
                 type: 'POST',
                 data: {
                     csrfmiddlewaretoken: csrfToken,
                 },
-                url: "/"+testId+"/delete/",
-                success: function(data) {
-                    //alert('Test deleted successfully.');
+                url: deleteUrl,
+                success: function(response) {
+                    if (response.success) {
+                        // Test deletion was successful, redirect to the test list page
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'The test has been deleted.',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            onClose: function() {
+                                window.location.href = "/";
+                            }
+                        });
+                    } else {
+                        // Test deletion failed, show an error message
+                        Swal.fire('Error!', response.error_message, 'error');
+                    }
                 },
                 error: function() {
-                    //alert('Error deleting test.');
+                    // An error occurred during the request
+                    Swal.fire('Error!', 'Error deleting test.', 'error');
                 }
             });
         }, 'The test has been deleted.', '/');
@@ -135,6 +134,7 @@ $(function () {
 document.querySelector('[name="replace-file"]').addEventListener('click', function() {
     showReplaceModal();
 });
+
 function showReplaceModal() {
     const testId = $('tr[data-test-id]:first').data('test-id');
     const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
@@ -169,10 +169,18 @@ function showReplaceModal() {
                     if (!response.ok) {
                         throw new Error(response.statusText);
                     }
+                    return response.json();  // Parse the JSON response
                 })
-                .catch(error => {
-                    Swal.showValidationMessage(`Request failed: ${error}`);
-                });
+                .then(data => {
+                    if (!data.success) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.error  // Show the specific error message received from Django
+                        });
+                        throw new Error(data.error);  // Throw an error with the error message from Django
+                    }
+                })
             }
 
             return null;
@@ -185,7 +193,6 @@ function showReplaceModal() {
         }
     });
 }
-
 
 
 

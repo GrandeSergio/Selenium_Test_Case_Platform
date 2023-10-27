@@ -1,0 +1,52 @@
+{% load static %}
+<h3>{{ test.name }}</h3>
+<div class="row" style="padding-bottom:5px">
+  <div class="col-md-8">
+    <div class="btn-group">
+        <button id="replace-file-btn" class="btn btn-primary"  name="replace-file" data-url="{% url 'replace_file' test_id=test.id %}">
+            <lord-icon src="https://cdn.lordicon.com/wfadduyp.json" trigger="hover" colors="primary:#121331" state="hover-1" class="icon"></lord-icon> Replace File
+        </button>
+        <button id="run-test-btn" class="btn btn-dark" data-test-id="{{ test.id }}" data-run-url="{% url 'run_test_cases' test_id=test.id %}" data-toggle="tooltip" data-placement="bottom" title="Run Test">
+          <lord-icon
+            src="https://cdn.lordicon.com/xddtsyvc.json"
+            trigger="hover"
+            colors="primary:#121331"
+            state="hover"
+            class="icon">
+          </lord-icon>
+        </button>
+        </div>
+      </div>
+    <div class="col-md-4 text-right">
+        <button id="delete-test-btn" class="btn btn-danger" data-test-id="{{ test.id }}" data-delete-url="{% url 'delete_test_case' test_id=test.id %}" data-toggle="tooltip" data-placement="bottom" title="Delete Test Case">
+              <lord-icon
+                src="https://cdn.lordicon.com/kfzfxczd.json"
+                trigger="hover"
+                colors="primary:#121331"
+                class="icon">
+              </lord-icon>
+            </button>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'details' %}active{% endif %}" id="general" href="{% url 'test_details' test_id=test.id %}">
+      <i class="fas fa-info-circle"></i> General
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'code' %}active{% endif %}" id="code" href="{% url 'test_code' test_id=test.id %}">
+      <i class="fas fa-code"></i> Code
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'history' %}active{% endif %}" id="history" href="{% url 'test_history' test_id=test.id %}">
+      <i class="fas fa-history"></i> History
+    </a>
+  </li>
+</ul>
+<div id="replaceModalPlaceholder"></div>
+<div id="alert-container"></div>
+
+<script src="{% static 'js/test_details.js' %}"></script>

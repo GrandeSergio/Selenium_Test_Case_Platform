@@ -1,10 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-
-
-<div class="code-container">
-    <pre class="code-text">{{ file_content }}</pre>
+{% include 'test_details_navbar.html' with active_tab='code' %}
+<div class="tab-content">
+    <div class="tab-pane {% if active_tab == 'code' %}active{% endif %}" id="code" role="tabpanel">
+        <div class="code-container">
+            <pre class="code-text">{{ file_content }}</pre>
+        </div>
+   </div>
 </div>
-
 {% endblock %}
 

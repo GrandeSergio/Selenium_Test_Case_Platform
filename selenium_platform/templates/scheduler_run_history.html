@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h3>Scheduler Run: {{ scheduler_run.id }}</h3>
+<div class="tab-content">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>
+          {% include 'table_filter_dropdown.html' with dropdown_id="TestIdDropdown" dropdown_label="Test Case ID" sort_by="id" search_field="test_case_id" search_value=search_test_case_id url_name='scheduler_run_history' %}
+        </th>
+        <th>
+          {% include 'table_filter_dropdown.html' with dropdown_id="RunIdDropdown" dropdown_label="Run ID" sort_by="id" search_field="run_id" search_value=search_run_id url_name='scheduler_run_history' %}
+        </th>
+        <th>
+          {% include 'table_filter_dropdown.html' with dropdown_id="NameDropdown" dropdown_label="Test Case Name" sort_by="name" search_field="test_case_name" search_value=search_test_case_name url_name='scheduler_run_history' %}
+        </th>
+        <th>
+          {% include 'table_filter_dropdown.html' with dropdown_id="StatusDropdown" dropdown_label="Status" sort_by="status" search_field="status" search_value=search_status url_name='scheduler_run_history' %}
+        </th>
+        <th>
+          {% with sort_by=request.GET.sort_by sort_order=request.GET.sort_order %}
+            {% if sort_by == 'date' and sort_order == 'desc' %}
+              <a class="label" href="{% url 'scheduler_run_history' scheduler_run_id=scheduler_run.id %}?sort_by=date&sort_order=asc">Run Date &#8595;</a>
+            {% elif sort_by == 'date' and sort_order == 'asc' %}
+              <a class="label" href="{% url 'scheduler_run_history' scheduler_run_id=scheduler_run.id %}?sort_by=date&sort_order=desc">Run Date &#8593;</a>
+            {% else %}
+              <a class="label" href="{% url 'scheduler_run_history' scheduler_run_id=scheduler_run.id %}?sort_by=date&sort_order=desc">Run Date &#8595;&#8593;</a>
+            {% endif %}
+          {% endwith %}
+        </th>
+        <th>Output</th>
+        <th>Test Case</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for test_run in page_obj %}
+        <tr>
+          <td>{{ test_run.test.id }}</td>
+          <td>{{ test_run.id }}</td>
+          <td>{{ test_run.test.name }}</td>
+          <td>{{ test_run.status }}</td>
+          <td>{{ test_run.date|date:"d-m-Y H:i:s" }}</td>
+          <td><a href="{% url 'run_output' test_run.id %}" class="btn btn-primary" data-toggle="tooltip"
+                               data-placement="right" title="View Output">
+                            <i class="fas fa-eye dark-icon"></i> </a></td>
+          <td><a href="{% url 'test_details' test_id=test_run.test.id %}" class="btn btn-dark"
+                             data-toggle="tooltip" data-placement="right" title="Go To Test Case">
+                            <i class="fas fa-flask"></i></a></td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No test runs found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="panel panel-pagination panel-default panel-horizontal">
+      <nav aria-label="Test run list pagination">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&laquo;</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&lt;</a>
+          </li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+              <li class="page-item active">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&gt;</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&raquo;</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% load static %}
+<div class="dropdown">
+  <a class="header-sort dropdown-toggle" href="#" role="button" id="{{ dropdown_id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{ dropdown_label }}
+  </a>
+  <div class="dropdown-menu" aria-labelledby="{{ dropdown_id }}">
+    <a class="dropdown-item" href="?sort_by={{ sort_by }}&sort_order=asc">
+      <i class="fas fa-arrow-down-a-z"></i> Sort A-Z</a>
+    <a class="dropdown-item" href="?sort_by={{ sort_by }}&sort_order=desc">
+      <i class="fas fa-arrow-down-z-a"></i> Sort Z-A</a>
+    <div class="dropdown-divider"></div>
+    {% url url_name url_args as dynamic_url %}
+    <form class="form-inline" method="GET" action="{{ dynamic_url }}">
+      <input type="hidden" name="sort_by" value="{{ sort_by }}">
+      <input type="hidden" name="sort_order" value="asc">
+      <input type="text" name="search_{{ search_field }}" placeholder="Search {{ dropdown_label }}..." class="form-control" value="{{ search_value }}">
+      <div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i> Search</button>
+        <button type="reset" class="btn btn-secondary" onclick="resetSearch(event, '{{ dynamic_url }}')">
+          <i class="fas fa-filter-circle-xmark"></i> Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'js/table_filter_dropdown.js' %}"></script>

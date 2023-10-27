@@ -17,8 +17,26 @@
               <p>{{ error_message }}</p>
               {% endif %}
 
+
               <form method="POST">
                 {% csrf_token %}
+                <!-- display the toast messages -->
+                {% if form.errors %}
+                <script src="{% static 'js/bootstrap.min.js' %}"></script>
+                <link rel="stylesheet" href="{% static 'css/style.css' %}">
+                <script>
+                  var toastRegisterMessages = [
+                    {% for field in form %}
+                      {% if field.errors %}
+                        {% for error in field.errors %}
+                          "{{ field.label }}: {{ error }}",
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  ];
+                </script>
+                <script src="{% static 'js/register.js' %}"></script>
+                {% endif %}
                 <div class="form-outline form-white mb-4">
                   <label for="username" class="form-label">Username</label>
                   <input type="text" id="username" class="form-control form-control-lg" name="username" required>
@@ -36,7 +54,7 @@
                   <input type="password" id="password2" class="form-control form-control-lg" name="password2" required>
                 </div>
 
-                <button class="btn btn-dark px-5" type="submit">Register</button>
+                <button class="btn btn-dark px-5" id="register" type="submit">Register</button>
               </form>
             </div>
             <div>
@@ -50,4 +68,5 @@
     </div>
   </div>
 </section>
+
 {% endblock %}

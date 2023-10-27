@@ -3,119 +3,35 @@
 
 {% block content %}
     <h3>Test History</h3>
-    <div class="container">
+    <div class="tab-content">
         <table class="table table-sm" id="history-table">
             <thead>
                 <tr>
                     <th>
-                        <div class="dropdown">
-                          <a class="header-sort dropdown-toggle" href="#" role="button" id="runidDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Run ID
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="runidDropdown">
-                            <a class="dropdown-item" href="?sort_by=id&sort_order=asc">Sort A-Z</a>
-                            <a class="dropdown-item" href="?sort_by=id&sort_order=desc">Sort Z-A</a>
-                            <div class="dropdown-divider"></div>
-                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
-                              <input type="hidden" name="sort_by" value="id">
-                              <input type="hidden" name="sort_order" value="asc">
-                              <input type="text" name="search_run_id" placeholder="Search Run ID..." class="form-control" value="{{ search_run_id }}">
-                              <div class="d-flex justify-content-center">
-                                <div class="dropdown-submit">
-                                <button id="Dropdown-search" type="submit" class="btn btn-primary">Search</button>
-                                <button id="Dropdown-reset" type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
+                      {% include 'table_filter_dropdown.html' with dropdown_id="runidDropdown" dropdown_label="Run ID" sort_by="id" search_field="run_id" search_value=search_run_id url_name='test_history_list' %}
                     </th>
                     <th>
-                        <div class="dropdown">
-                          <a class="header-sort dropdown-toggle" href="#" role="button" id="idDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Script ID
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="idDropdown">
-                            <a class="dropdown-item" href="?sort_by=id&sort_order=asc">Sort A-Z</a>
-                            <a class="dropdown-item" href="?sort_by=id&sort_order=desc">Sort Z-A</a>
-                            <div class="dropdown-divider"></div>
-                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
-                              <input type="hidden" name="sort_by" value="id">
-                              <input type="hidden" name="sort_order" value="asc">
-                              <input type="text" name="search_script_id" placeholder="Search Script ID..." class="form-control" value="{{ search_script_id }}">
-                              <div>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
+                      {% include 'table_filter_dropdown.html' with dropdown_id="idDropdown" dropdown_label="Script ID" sort_by="id" search_field="script_id" search_value=search_script_id url_name='test_history_list' %}
                     </th>
                     <th>
-                        <div class="dropdown">
-                          <a class="header-sort dropdown-toggle" href="#" role="button" id="nameDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Name
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="nameDropdown">
-                            <a class="dropdown-item" href="?sort_by=name&sort_order=asc">Sort A-Z</a>
-                            <a class="dropdown-item" href="?sort_by=name&sort_order=desc">Sort Z-A</a>
-                            <div class="dropdown-divider"></div>
-                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
-                              <input type="hidden" name="sort_by" value="name">
-                              <input type="hidden" name="sort_order" value="asc">
-                              <input type="text" name="search_name" placeholder="Search Name..." class="form-control" value="{{ search_name }}">
-                              <div>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
+                      {% include 'table_filter_dropdown.html' with dropdown_id="nameDropdown" dropdown_label="Name" sort_by="name" search_field="name" search_value=search_name url_name='test_history_list' %}
                     </th>
                     <th>
-                        <div class="dropdown">
-                          <a class="header-sort dropdown-toggle" href="#" role="button" id="lastRunStatusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Last Run Status
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="lastRunStatusDropdown">
-                            <a class="dropdown-item" href="?sort_by=last_run_status&sort_order=asc">Sort A-Z</a>
-                            <a class="dropdown-item" href="?sort_by=last_run_status&sort_order=desc">Sort Z-A</a>
-                            <div class="dropdown-divider"></div>
-                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
-                              <input type="hidden" name="sort_by" value="last_run_status">
-                              <input type="hidden" name="sort_order" value="asc">
-                              <input type="text" name="search_last_run_status" placeholder="Search Last Run Status..." class="form-control" value="{{ search_last_run_status }}">
-                              <div>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
+                      {% include 'table_filter_dropdown.html' with dropdown_id="lastRunStatusDropdown" dropdown_label="Status" sort_by="status" search_field="last_run_status" search_value=search_last_run_status url_name='test_history_list' %}
                     </th>
                     <th>
-                        <div class="dropdown">
-                          <a class="header-sort dropdown-toggle" href="#" role="button" id="lastRunDateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Last Run Date
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="lastRunDateDropdown">
-                            <a class="dropdown-item" href="?sort_by=last_run_date&sort_order=asc">Sort A-Z</a>
-                            <a class="dropdown-item" href="?sort_by=last_run_date&sort_order=desc">Sort Z-A</a>
-                            <div class="dropdown-divider"></div>
-                            <form class="form-inline" method="GET" action="{% url 'test_history_list' %}">
-                              <input type="hidden" name="sort_by" value="last_run_date">
-                              <input type="hidden" name="sort_order" value="asc">
-                              <input type="text" name="search_last_run_date" placeholder="Search Last Run Date..." class="form-control" value="{{ search_last_run_date }}">
-                              <div>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                                <button type="reset" class="btn btn-secondary" onclick="location.href='{% url 'test_history_list' %}'">Reset</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
+                      {% with sort_by=request.GET.sort_by sort_order=request.GET.sort_order %}
+                        {% if sort_by == 'date' and sort_order == 'desc' %}
+                          <a class="label" href="{% url 'test_history_list' %}?sort_by=date&sort_order=asc">Run Date &#8595;</a>
+                        {% elif sort_by == 'date' and sort_order == 'asc' %}
+                          <a class="label" href="{% url 'test_history_list' %}?sort_by=date&sort_order=desc">Run Date &#8593;</a>
+                        {% else %}
+                          <a class="label" href="{% url 'test_history_list' %}?sort_by=date&sort_order=desc">Run Date &#8595;&#8593;</a>
+                        {% endif %}
+                      {% endwith %}
                     </th>
-                    <th>Go To</th>
-                    <th>Console Output</th>
+                    <th>Test Case</th>
+                    <th>Output</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,8 +42,15 @@
                         <td>{{ test_run.test.name }}</td>
                         <td>{{ test_run.status }}</td>
                         <td>{{ test_run.date|date:"d-m-Y H:i:s" }}</td>
-                        <td><a href="{% url 'test_details' test_id=test_run.test.id %}" class="btn btn-dark">Test Case</a></td>
-                        <td><a href="{% url 'run_output' run_id=test_run.id %}" class="btn btn-primary">View Output</a></td>
+                        <td>
+                          <a href="{% url 'test_details' test_id=test_run.test.id %}" class="btn btn-dark"
+                             data-toggle="tooltip" data-placement="right" title="Go To Test Case">
+                            <i class="fas fa-flask"></i>
+                          </a>
+                        </td>
+                        <td><a href="{% url 'run_output' run_id=test_run.id %}" class="btn btn-primary" data-toggle="tooltip"
+                               data-placement="right" title="View Output">
+                            <i class="fas fa-eye dark-icon"></i> </a></td>
                     </tr>
                 {% empty %}
                     <tr>

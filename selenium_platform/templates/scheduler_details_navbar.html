@@ -1,0 +1,134 @@
+
+<h3>Scheduler Details - {{ scheduler.name }}</h3>
+<div class="row" style="padding-bottom:5px">
+  <div class="col-md-8">
+    <div class="btn-group">
+    <form method="post" action="{% url 'scheduler_details' scheduler.id %}">
+      {% csrf_token %}
+      <button class="btn btn-dark" id="run_scheduler" type="submit" name="action" value="run_all" {% if test_cases|length == 0 %}disabled{% endif %}>
+        <lord-icon src="https://cdn.lordicon.com/xddtsyvc.json" trigger="hover" colors="primary:#121331" state="hover" class="icon">
+        </lord-icon>
+         Run Scheduler
+      </button>
+    </form>
+    <a type="button" class="btn btn-primary" id="add_test_cases" href="{% url 'add_test_cases' scheduler.id %}">
+        <i class="fas fa-light fa-plus"></i> Add Test Cases</a>
+    </div>
+  </div>
+    <div class="col-md-4 text-right">
+    <button id="delete-scheduler-btn" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete Scheduler">
+      <lord-icon
+        src="https://cdn.lordicon.com/kfzfxczd.json"
+        trigger="hover"
+        colors="primary:#121331"
+        class="icon">
+      </lord-icon>
+    </button>
+  </div>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'details' %}active{% endif %}" href="{% url 'scheduler_details' scheduler_id=scheduler.id %}">General</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if active_tab == 'history' %}active{% endif %}" href="{% url 'scheduler_history' scheduler_id=scheduler.id %}">History</a>
+  </li>
+</ul>
+
+<script>
+  $(document).ready(function() {
+    // Switch to the last active tab on page load
+    if (window.location.hash) {
+      var hash = window.location.hash;
+      $('a[data-toggle="tab"][href="' + hash + '"]').tab('show');
+    } else {
+      // Set the first tab as active by default
+      $('a[data-toggle="tab"]').first().tab('show');
+    }
+
+    // Update the URL hash when a tab is shown
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+      var target = $(e.target).attr("href");
+      window.location.hash = target;
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+  // Switch to the last active tab on page load
+  if (window.location.hash) {
+    var hash = window.location.hash;
+    $('a[data-toggle="tab"][href="' + hash + '"]').tab('show');
+  } else {
+    // Set the first tab as active by default
+    $('a[data-toggle="tab"]').first().tab('show');
+  }
+
+  // Update the URL hash when a tab is shown
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    var target = $(e.target).attr("href");
+    window.location.hash = target;
+  });
+
+  // Disable "Run Scheduler" button if no test cases
+  var testCasesLength = {{ test_cases|length }};
+  if (testCasesLength === 0) {
+    $('#run_scheduler').prop('disabled', true);
+  }
+});
+</script>
+
+<script>
+$(document).ready(function() {
+  $('#delete-scheduler-btn').click(function() {
+    sweetAlertConfirm(function() {
+      return $.ajax({
+        url: '{% url 'delete_scheduler' scheduler.id %}',
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: get_token(),
+        },
+        dataType: 'json'
+      });
+    });
+  });
+
+  function get_token() {
+    return $('input[name="csrfmiddlewaretoken"]').val();
+  }
+    function sweetAlertConfirm(callback) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            darkMode: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                callback().then((response) => {
+                    if (response.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            'The scheduler has been deleted.',
+                            'success'
+                        ).then(() => {
+                            window.location.href = "{% url 'scheduler_list' %}";
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            response.error_message,
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+});
+</script>

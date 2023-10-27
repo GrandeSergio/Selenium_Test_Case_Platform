@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+  <h3>Schedulers</h3>
+  <button type="button" class="btn btn-primary" id="create_scheduler" data-toggle="modal" data-target="#createSchedulerModal">
+  <i class="fas fa-light fa-plus"></i> Create Scheduler
+</button>
+</div>
+  <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>
+            {% include 'table_filter_dropdown.html' with dropdown_id="scheduleridDropdown" dropdown_label="ID" sort_by="id" search_field="scheduler_id" search_value=search_scheduler_id url_name='scheduler_list' %}
+          </th>
+          <th>
+            {% include 'table_filter_dropdown.html' with dropdown_id="schedulerNameDropdown" dropdown_label="Name" sort_by="name" search_field="scheduler_name" search_value=search_scheduler_name url_name='scheduler_list' %}          </th>
+          <th>
+            {% with sort_by=request.GET.sort_by sort_order=request.GET.sort_order %}
+              {% if sort_by == 'created_at' and sort_order == 'desc' %}
+                <a class="label" href="{% url 'scheduler_list' %}?sort_by=created_at&sort_order=asc">Created At &#8595;</a>
+              {% elif sort_by == 'created_at' and sort_order == 'asc' %}
+                <a class="label" href="{% url 'scheduler_list' %}?sort_by=created_at&sort_order=desc">Created At &#8593;</a>
+              {% else %}
+                <a class="label" href="{% url 'scheduler_list' %}?sort_by=created_at&sort_order=desc">Created At &#8595;&#8593;</a>
+              {% endif %}
+            {% endwith %}
+          </th>
+          <th>
+            {% with sort_by=request.GET.sort_by sort_order=request.GET.sort_order %}
+              {% if sort_by == 'last_run_date' and sort_order == 'desc' %}
+                <a class="label" href="{% url 'scheduler_list' %}?sort_by=last_run_date&sort_order=asc">Last Run Date &#8595;</a>
+              {% elif sort_by == 'last_run_date' and sort_order == 'asc' %}
+                <a class="label" href="{% url 'scheduler_list' %}?sort_by=last_run_date&sort_order=desc">Last Run Date &#8593;</a>
+              {% else %}
+                <a class="label" href="{% url 'scheduler_list' %}?sort_by=last_run_date&sort_order=desc">Last Run Date &#8595;&#8593;</a>
+              {% endif %}
+            {% endwith %}
+          </th>
+          <th>Go to</th>
+        </tr>
+
+      </thead>
+  <tbody>
+    {% for scheduler in page_obj %}
+      <tr>
+        <td>{{ scheduler.id }}</td>
+        <td>{{ scheduler.name }}</td>
+        <td>{{ scheduler.created_at|date:"d-m-Y H:i:s" }}</td>
+        <td>
+          {% if scheduler.last_run_date %}
+            {{ scheduler.last_run_date|date:"d-m-Y H:i:s" }}
+        {% else %}
+                Not run yet
+            {% endif %}</td>
+        <td><a href="{% url 'scheduler_details' scheduler.id %}" class="btn btn-dark">
+          <i class="fas fa-light fa-info"></i> Scheduler Details</a></td>
+      </tr>
+        {% empty %}
+      <tr>
+        <td colspan="6">No Schedulers found.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+  <div class="panel panel-pagination panel-default panel-horizontal">
+    <nav aria-label="Test run list pagination">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&laquo;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&lt;</a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <li class="page-item active">
+              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+          {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&gt;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if sort_by %}&sort_by={{ sort_by }}&sort_order={{ sort_order }}{% endif %}">&raquo;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+
+{% include 'create_scheduler.html' %}
+
+{% endblock %}

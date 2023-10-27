@@ -1,19 +1,14 @@
 from django import forms
-from django.forms.widgets import ClearableFileInput, FileInput
-from .models import TestCase
+from .models import TestCase, Scheduler
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
 class TestUploadForm(forms.ModelForm):
-    #file = forms.FileField(widget=FileInput(attrs={'style': 'background-color: yellow;'}), )
 
     class Meta:
         model = TestCase
         fields = ('name', 'file')
-        #widgets = {
-        #    'file': forms.FileInput(attrs={'class': 'custom-file-input.custom-file-input'}),
-        #}
 
 
 class EditCodeForm(forms.Form):
@@ -33,3 +28,8 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+class SchedulerForm(forms.ModelForm):
+    class Meta:
+        model = Scheduler
+        fields = ['name']

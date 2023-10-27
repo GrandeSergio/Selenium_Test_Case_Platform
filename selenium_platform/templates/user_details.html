@@ -6,23 +6,41 @@
     {% include 'details_sidebar.html' %}
 
     <div class="col-md-9 details-content">
-        <!-- Main content -->
         <h3>User Details</h3>
-        <p>Username: {{ user.username }}</p>
-        <p>Email: {{ user.email }}</p>
-
-        <!-- Add more user details as needed -->
-        <button id="delete-account-btn" class="btn btn-danger">Delete Account</button>
-
-        <!-- Add more user details as needed -->
-        <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-dark">Logout</button>
-        </form>
-        <form id="delete-account-form" action="{% url 'delete_account' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" style="display: none;"></button>
-        </form>
+        <table class="table table-sm table-vertical">
+            <!-- Main content -->
+            <tr>
+                <th>Username: </th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Email: </th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Logout: </th>
+                <td>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-dark" data-toggle="tooltip" data-placement="right" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </form>
+                    <form id="delete-account-form" action="{% url 'delete_account' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" style="display: none;"></button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <th>Delete accout: </th>
+                <td>
+                    <button id="delete-account-btn" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Delete account">
+                        <i class="fas fa-light fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

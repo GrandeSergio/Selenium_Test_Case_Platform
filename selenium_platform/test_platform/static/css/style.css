@@ -1,8 +1,8 @@
 
 :root {
   --max-width: 1200px;
-  --main-color: #222831;
-  --second-color: #424e5f;
+  --main-color: #222222; /* 222831*/
+  --second-color: #3b4554; /* 29303D*/
   --third-color: #6b7d98;
   --button-color: #343a40;
   --button-color-hover: #4b545c;
@@ -90,8 +90,8 @@ textarea {
 }
 
 /* Override the default label color */
-label {
-    color: #dedede;
+.label {
+    color: #dedede !important;
 }
 
 /* Override the default button background color */
@@ -409,7 +409,70 @@ color: var(--font-color) !important;
   margin-left: auto;
 }
 
-.dropdown-menu{
-    width: 100px;
+.dropdown-menu-user{
+    width: 200px;
     height: 120px;
+}
+.fas{
+    padding-left:2px;
+    padding-right:2px;
+    color: var(--font-color);
+}
+
+.dark-icon{
+    color: var(--main-color) !important;
+  }
+
+.fa-info{
+    padding-left:5px;
+    padding-right:10px
+}
+
+/* CSS in your styles.css or a custom CSS file */
+.table-vertical {
+  width: 100%; /* Set the width of the table as per your layout */
+}
+
+.table-vertical th,
+.table-vertical td {
+  padding: 8px; /* Add padding for better readability */
+  border-bottom: 1px solid #dee2e6; /* Add a border between rows */
+}
+
+.table-vertical th {
+  width: 30%; /* Set a specific width for the header column */
+  text-align: left; /* Align the header text to the left */
+}
+
+/* Optionally, style the first column differently (e.g., bold) */
+.table-vertical th:first-child {
+  font-weight: bold;
+}
+
+/* Optionally, align the data cells to the left or right */
+.table-vertical td {
+  text-align: left; /* or text-align: right; */
+}
+/* CSS for the success toast message */
+.success-toast {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* CSS for the error toast message */
+.error-toast {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Style the toast message div */
+#toast-message-run-script {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 32px;
+    border-radius: 5px;
+    z-index: 999;
 }

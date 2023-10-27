@@ -13,15 +13,19 @@
           <div class="card-body p-5 text-center login-container">
 
             <div class="mb-md-5 mt-md-4 pb-5">
-
+              <i class="fas fa-flask-vial fa-beat fa-2xl" style="padding-bottom:50px"></i>
               <h2 class="fw-bold mb-2 text-uppercase">Welcome to the Test Platform</h2>
-                <p class="text-white-50 mb-5">Please Log in or create account to proceed</p>
-                <div>
-                  <a class="btn btn-dark" href="{% url 'login' %}">Log in</a>
-                  <span style="margin-left: 10px; margin-right: 10px;"><a class="text-white-50 mb-5"> Or </a></span>
-                  <a class="btn btn-dark" href="{% url 'register' %}">Register</a>
-                </div>
 
+              <p class="text-white-50 mb-5">Please Log in or create an account to proceed</p>
+              <div>
+                <a class="btn btn-dark" id="login" href="{% url 'login' %}">
+                  <i class="fas fa-sign-in-alt"></i> Log in
+                </a>
+                <span style="margin-left: 20px; margin-right: 20px;"><a class="text-white-50 mb-5"></a></span>
+                <a class="btn btn-dark" id="register" href="{% url 'register' %}">
+                  <i class="fas fa-user-plus"></i> Register
+                </a>
+              </div>
             </div>
           </div>
         </div>
